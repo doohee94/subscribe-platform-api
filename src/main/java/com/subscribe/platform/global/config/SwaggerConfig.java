@@ -1,4 +1,4 @@
-package com.subscribe.platform.config;
+package com.subscribe.platform.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

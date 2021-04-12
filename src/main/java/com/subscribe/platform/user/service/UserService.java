@@ -1,5 +1,6 @@
 package com.subscribe.platform.user.service;
 
+import com.subscribe.platform.user.entity.User;
 import com.subscribe.platform.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,5 +10,9 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    public User getUser(String email){
+        return userRepository.findByEmail(email);
+    }
 
 }
