@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -30,6 +31,8 @@ public class User extends BaseTimeEntity {
     @Embedded
     private Address address;
 
-
+    //TODO: many to many 로 바꿔야 할듯
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Authority> authorities;
 
 }

@@ -10,4 +10,7 @@ public class Password {
 
     private String password;
 
+    public boolean isPasswordMatches(String password) {
+        return this.password.equals(password);
+    }
 }

@@ -1,5 +1,6 @@
-package com.subscribe.platform.global.security;
+package com.subscribe.platform.global.security.jwt;
 
+import com.subscribe.platform.global.security.service.CustomUserDetailService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -19,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class JwtTokenProvider {
+public class TokenProvider {
 
     private final long TOKEN_VALID_MILISECOND = 1000L * 60 * 60 * 10; // 10시간
 
@@ -28,7 +29,7 @@ public class JwtTokenProvider {
 
     private final UserDetailsService userDetailsService;
 
-    public JwtTokenProvider(@Qualifier("customUserDetailService") CustomUserDetailService customUserDetailService) {
+    public TokenProvider(@Qualifier("customUserDetailService") CustomUserDetailService customUserDetailService) {
         this.userDetailsService = customUserDetailService;
     }
 

@@ -1,5 +1,6 @@
-package com.subscribe.platform.global.security;
+package com.subscribe.platform.global.security.service;
 
+import com.subscribe.platform.user.entity.User;
 import com.subscribe.platform.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,12 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return null;
+
+        User user = userService.findByEmail(email);
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail().getEmail(),
+                user.getPassword().getPassword(),
+                user.getAuthorities());
     }
 }
