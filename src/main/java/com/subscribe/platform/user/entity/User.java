@@ -2,11 +2,11 @@ package com.subscribe.platform.user.entity;
 
 import com.subscribe.platform.common.entity.BaseTimeEntity;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -17,15 +17,22 @@ public class User extends BaseTimeEntity {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    private long id;
 
-    String email;
+    @Column(name = "user_name")
+    private String name;
 
-    String password;
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus;
+    @Embedded
+    private Email email;
+    @Embedded
+    private Password password;
+    @Embedded
+    private Address address;
 
-    @Builder
-    public User(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
+    //TODO: many to many 로 바꿔야 할듯
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Authority> authorities;
+
 }
