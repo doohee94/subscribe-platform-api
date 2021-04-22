@@ -1,7 +1,7 @@
-package com.subscribe.platform.global;
+package com.subscribe.platform.global.error;
 
-import com.subscribe.platform.global.exception.BusinessException;
-import com.subscribe.platform.global.exception.ErrorCode;
+import com.subscribe.platform.global.error.exception.BusinessException;
+import com.subscribe.platform.global.error.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.bind.BindException;
 import org.springframework.http.HttpStatus;

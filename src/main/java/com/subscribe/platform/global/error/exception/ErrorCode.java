@@ -1,4 +1,4 @@
-package com.subscribe.platform.global.exception;
+package com.subscribe.platform.global.error.exception;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -12,6 +12,9 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(500, "C004", "Server Error"),
     INVALID_TYPE_VALUE(400, "C005", " Invalid Type Value"),
     HANDLE_ACCESS_DENIED(403, "C006", "Access is Denied"),
+
+    //auth
+    JWT_EXPIRED(401,"A001", "JWT Token expired"),
 
     // user
     EMAIL_DUPLICATION(400, "U001", "Email is Duplication"),

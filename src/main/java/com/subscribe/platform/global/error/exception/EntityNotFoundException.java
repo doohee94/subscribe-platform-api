@@ -1,4 +1,4 @@
-package com.subscribe.platform.global.exception;
+package com.subscribe.platform.global.error.exception;
 
 public class EntityNotFoundException extends BusinessException {
 

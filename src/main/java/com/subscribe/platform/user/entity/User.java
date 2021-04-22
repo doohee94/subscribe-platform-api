@@ -35,4 +35,7 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Authority> authorities;
 
+    public boolean isMatchPassword(String password) {
+        return false;
+    }
 }
