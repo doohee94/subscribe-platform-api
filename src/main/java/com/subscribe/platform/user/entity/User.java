@@ -24,8 +24,8 @@ public class User extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
-    @Embedded
-    private Email email;
+//    @Embedded
+    private String email;
     @Embedded
     private Password password;
     @Embedded

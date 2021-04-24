@@ -20,19 +20,18 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     /**
      * 유저 정보를 조회 후 반환.
-     * @param username
+     * @param email
      * @return
      * @throws UsernameNotFoundException
      */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        com.subscribe.platform.user.entity.User user = userService.findByEmail(email);
 
-        com.subscribe.platform.user.entity.User user = userService.findByEmail(username);
-
-        if(user == null){
-            throw new UsernameNotFoundException("해당 유저를 찾을 수 없습니다. :::"+username);
+        if(user  == null){
+            throw new UsernameNotFoundException("해당 유저를 찾을 수 없습니다. :::"+email);
         }
 
-        return new User(user.getEmail().getEmail(), user.getPassword().getPassword(),user.getAuthorities());
+        return new User(user.getEmail(),user.getPassword().getPassword() ,user.getAuthorities());
     }
 }

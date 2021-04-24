@@ -1,4 +1,4 @@
-package com.subscribe.platform.global.security.jwt;
+package com.subscribe.platform.global.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

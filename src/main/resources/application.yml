@@ -11,3 +11,10 @@ spring:
       ddl-auto: update
     show-sql: true
     open-in-view: false
+
+
+jwt:
+  token:
+    secret-key: "hello"
+    expTime: 1800000
+    issuer: "dohee"

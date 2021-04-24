@@ -1,6 +1,6 @@
 package com.subscribe.platform.global.security.provider;
 
-import com.subscribe.platform.global.security.jwt.JwtAuthenticationToken;
+import com.subscribe.platform.global.security.JwtAuthenticationToken;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 @Component
 @SuppressWarnings("unchecked")
 public class JwtAuthenticationProvider implements AuthenticationProvider {
+    private final AuthenticationFailureHandler failureHandler;
 
     /**
      * JWT 유효성 검증

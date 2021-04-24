@@ -1,8 +1,8 @@
 package com.subscribe.platform.global.security.filter;
 
+import com.subscribe.platform.global.security.JwtAuthenticationToken;
 import com.subscribe.platform.global.security.config.SecurityConfig;
-import com.subscribe.platform.global.security.jwt.JwtAuthenticationToken;
-import com.subscribe.platform.global.security.jwt.JwtUtil;
+import com.subscribe.platform.global.security.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import lombok.extern.slf4j.Slf4j;

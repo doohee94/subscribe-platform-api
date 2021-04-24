@@ -1,6 +1,17 @@
 package com.subscribe.platform.user.entity;
 
+import lombok.Getter;
+
+@Getter
 public enum UserStatus {
-    TEST
+    ADMIN("admin")
     ;
+
+    private String test;
+
+    UserStatus(String test) {
+        this.test = test;
+    }
+
+
 }

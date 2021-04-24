@@ -1,4 +1,4 @@
-package com.subscribe.platform.global.security.jwt;
+package com.subscribe.platform.global.security.util;
 
 import com.subscribe.platform.global.security.exception.JwtExpiredTokenException;
 import io.jsonwebtoken.*;
@@ -35,7 +35,7 @@ public class JwtUtil {
      */
     public String createToken(String username, List<GrantedAuthority> authorities){
         Claims claims = Jwts.claims().setSubject(username);
-        claims.put("roles", authorities.stream().map(Object::toString).collect(Collectors.toList()));
+        claims.put("roles", authorities.stream().map(role -> role.toString()).collect(Collectors.toList()));
 
         LocalDateTime currentTime = LocalDateTime.now();
 
@@ -56,7 +56,7 @@ public class JwtUtil {
      * @throws BadCredentialsException
      * @throws JwtExpiredTokenException
      */
-    public Jws<Claims> parserToken(String token) throws BadCredentialsException, JwtExpiredTokenException{
+    public Jws<Claims> parserToken(String token) throws BadCredentialsException, JwtExpiredTokenException {
         Jws<Claims> claimsJws = null;
         try {
             claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
