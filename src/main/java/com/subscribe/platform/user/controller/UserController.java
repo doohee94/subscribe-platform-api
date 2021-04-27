@@ -1,13 +1,12 @@
 package com.subscribe.platform.user.controller;
 
+import com.subscribe.platform.user.dto.UserDto;
 import com.subscribe.platform.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -17,6 +16,11 @@ public class UserController {
     public void test(String email){
 
         System.out.println(userService.findByEmail(email));
+    }
+
+    @PostMapping("/sign-up")
+    public void createUser(@RequestBody UserDto.CreateUserDto createUserDto){
+        userService.createUser(createUserDto);
     }
 
 
