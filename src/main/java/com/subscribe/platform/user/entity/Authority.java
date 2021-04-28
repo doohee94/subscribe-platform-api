@@ -1,20 +1,25 @@
 package com.subscribe.platform.user.entity;
 
+import com.subscribe.platform.common.entity.BaseTimeEntity;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import java.util.Set;
 
 @Entity
 @Table
-public class Authority implements GrantedAuthority {
+public class Authority extends BaseTimeEntity implements GrantedAuthority {
 
     @Id
     private long id;
+
     private String authority;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @ManyToMany(mappedBy = "authorities")
+    private Set<User> user;
 
     @Override
     public String getAuthority() {

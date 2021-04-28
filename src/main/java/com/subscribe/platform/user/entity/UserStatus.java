@@ -4,14 +4,11 @@ import lombok.Getter;
 
 @Getter
 public enum UserStatus {
-    ADMIN("admin")
+    WAITING,
+    FAIL,
     ;
 
-    private String test;
 
-    UserStatus(String test) {
-        this.test = test;
-    }
 
 
 }

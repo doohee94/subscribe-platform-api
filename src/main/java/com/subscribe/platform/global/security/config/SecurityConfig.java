@@ -66,7 +66,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         List<String> permitAllEndpointList = Arrays.asList(
-                AUTHENTICATION_URL
+                AUTHENTICATION_URL,
+                "/api/user/sign-up"
         );
         http
                 .csrf().disable()
@@ -76,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/user/**").permitAll()
+                .antMatchers("/user/**").hasRole("MEMBER")
 //                .antMatchers("/api/say/userHello").hasAnyRole("USER")
                 .and()
                 .addFilterBefore(buildAsyncLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class)

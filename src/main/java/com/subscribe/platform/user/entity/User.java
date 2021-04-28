@@ -2,10 +2,12 @@ package com.subscribe.platform.user.entity;
 
 import com.subscribe.platform.common.entity.BaseTimeEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -22,20 +24,34 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_name")
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    private UserStatus userStatus;
-//    @Embedded
     private String email;
+
     @Embedded
     private Password password;
-    @Embedded
-    private Address address;
 
-    //TODO: many to many 로 바꿔야 할듯
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus;
+
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_authority",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id"))
     private Set<Authority> authorities;
 
-    public boolean isMatchPassword(String password) {
-        return false;
+
+    @Builder
+    public User(String name, String email, String password, Authority authorities) {
+        this.name = name;
+        this.email = email;
+        this.password = new Password(password);
+
+        this.authorities = new HashSet<>();
+
+        this.authorities.add(authorities);
+        this.userStatus = UserStatus.WAITING;
     }
+
+
+
 }

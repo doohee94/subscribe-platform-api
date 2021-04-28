@@ -1,6 +1,7 @@
 package com.subscribe.platform.global.security.controller;
 
 import com.subscribe.platform.global.security.model.LoginRequest;
+import com.subscribe.platform.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-
+    private final UserService userService;
 
     @PostMapping("/login")
     public void signUp(@RequestBody LoginRequest loginRequest) {
@@ -20,5 +21,7 @@ public class AuthController {
         System.out.println(loginRequest);
 
     }
+
+
 
 }
