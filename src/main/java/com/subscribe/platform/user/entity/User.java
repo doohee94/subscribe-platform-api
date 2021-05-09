@@ -42,8 +42,7 @@ public class User extends BaseTimeEntity {
             inverseJoinColumns = @JoinColumn(name = "authority_id"))
     private Set<Authority> authorities;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "store_id")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Store store;
 
 
@@ -64,7 +63,7 @@ public class User extends BaseTimeEntity {
     }
 
     // 판매자 생성자
-    @Builder(builderClassName = "createStoreBuilder", builderMethodName = "createStoreBuilder")
+    /*@Builder(builderClassName = "createStoreBuilder", builderMethodName = "createStoreBuilder")
     public User(String name, String email, String password, Authority authorities, Store store) {
 
         this.name = name;
@@ -74,6 +73,10 @@ public class User extends BaseTimeEntity {
         this.authorities.add(authorities);
         this.userStatus = UserStatus.WAITING;
         this.store = store;
-    }
+    }*/
 
+    public void setStore(Store store) {
+        this.store = store;
+        store.setUser(this);
+    }
 }
