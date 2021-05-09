@@ -67,7 +67,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         List<String> permitAllEndpointList = Arrays.asList(
                 AUTHENTICATION_URL,
-                "/api/user/sign-up"
+                "/api/user/sign-up",
+                "/api/user/checkEmailDupl"
         );
         http
                 .csrf().disable()

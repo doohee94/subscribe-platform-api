@@ -1,9 +1,14 @@
 package com.subscribe.platform.user.controller;
 
 import com.subscribe.platform.user.dto.UserDto;
+import com.subscribe.platform.user.entity.User;
 import com.subscribe.platform.user.service.UserService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -23,5 +28,15 @@ public class UserController {
         userService.createUser(createUserDto);
     }
 
+    @GetMapping("/checkEmailDupl")
+    public Map checkEmailDupl(String email){
+        return userService.findCheckByEmail(email);
+    }
 
+
+    @GetMapping("/getUserInfo")
+    public UserDto.getUserDto getUser(String email){
+        User result = userService.findByEmail(email);
+        return new UserDto.getUserDto(result.getName(),result.getEmail(),result.getPassword().getPassword());
+    }
 }

@@ -12,8 +12,16 @@ public class UserDto {
         private String password;
         private String name;
         private boolean isStore;
-
+        private String storeName;
+        private String businessNum;
     }
 
+    @Data
+    @AllArgsConstructor
+    public static class getUserDto{
+        private String email;
+        private String password;
+        private String name;
+    }
 }
 
