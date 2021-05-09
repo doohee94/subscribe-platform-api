@@ -23,5 +23,12 @@ public class UserController {
         userService.createUser(createUserDto);
     }
 
+    @GetMapping("/{id}")
+    public String getUserEmail(@PathVariable long id){
+
+        System.out.println("test");
+
+        return "";
+    }
 
 }

@@ -77,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/user/**").hasRole("MEMBER")
+                .antMatchers("/api/user/**").hasRole("MEMBER")
 //                .antMatchers("/api/say/userHello").hasAnyRole("USER")
                 .and()
                 .addFilterBefore(buildAsyncLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
