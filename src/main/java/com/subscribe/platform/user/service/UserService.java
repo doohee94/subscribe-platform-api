@@ -45,13 +45,7 @@ public class UserService {
                     .businessNum(createUserDto.getBusinessNum())
                     .build();
 
-            user = User.createStoreBuilder()
-                    .email(createUserDto.getEmail())
-                    .name(createUserDto.getName())
-                    .password(passwordEncoder.encode(createUserDto.getPassword()))
-                    .authorities(authority)
-                    .store(store)
-                    .build();
+            user.setStore(store);
         }
 
         userRepository.save(user);

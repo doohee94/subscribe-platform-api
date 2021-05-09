@@ -20,8 +20,13 @@ public class Store {
     private String storeName;
     private String businessNum;
 
-    @OneToOne(mappedBy = "store", fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     private User user;
+
+    public void setUser(User user){
+        this.user = user;
+    }
 
     @Builder
     public Store(String storeName, String businessNum){
