@@ -4,6 +4,7 @@ import com.subscribe.platform.user.dto.UserDto;
 import com.subscribe.platform.user.entity.User;
 import com.subscribe.platform.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -40,9 +41,6 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String getUserEmail(@PathVariable long id) {
-
-        System.out.println("test");
-
-        return "";
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }

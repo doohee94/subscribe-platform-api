@@ -77,10 +77,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests()
-                .antMatchers("/api/user/**").hasRole("MEMBER")
+//                .authorizeRequests()
+//                .antMatchers("/api/user/**").hasRole("MEMBER")
 //                .antMatchers("/api/say/userHello").hasAnyRole("USER")
-                .and()
+//                .and()
                 .addFilterBefore(buildAsyncLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(buildJwtTokenAuthenticationProcessingFilter(permitAllEndpointList, API_ROOT_URL), UsernamePasswordAuthenticationFilter.class);
     }

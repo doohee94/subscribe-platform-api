@@ -1,14 +1,13 @@
 package com.subscribe.platform.user.entity;
 
 import com.subscribe.platform.common.entity.BaseTimeEntity;
+import com.subscribe.platform.user.dto.CustomerUpdateDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.util.Assert;
 
 import javax.persistence.*;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,6 +44,9 @@ public class User extends BaseTimeEntity {
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Store store;
 
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Customer customer;
+
 
     /**
      * 일반 사용자의 경우 store 정보를 입력받지 않고 판매자의 경우 추가로 store의 정보를 입력받는다.
@@ -78,5 +80,24 @@ public class User extends BaseTimeEntity {
     public void setStore(Store store) {
         this.store = store;
         store.setUser(this);
+    }
+
+    public void updateCustomer(Customer customer) {
+        this.customer = customer;
+        customer.setUser(this);
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public void updateCustomer(CustomerUpdateDto customerUpdateDto) {
+        if(this.customer == null){
+            this.customer = customerUpdateDto.toEntity();
+            this.customer.setUser(this);
+        }
+
+        this.customer.update(customerUpdateDto);
+
     }
 }
