@@ -37,10 +37,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String getUserEmail(@PathVariable long id) {
-
-        System.out.println("test");
-
-        return "";
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
     /**
