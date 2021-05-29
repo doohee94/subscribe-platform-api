@@ -1,5 +1,6 @@
 package com.subscribe.platform.user.service;
 
+import com.subscribe.platform.user.dto.UpdateStoreDto;
 import com.subscribe.platform.user.dto.UserDto;
 import com.subscribe.platform.user.entity.Authority;
 import com.subscribe.platform.user.entity.Store;
@@ -59,5 +60,13 @@ public class UserService {
         Map result = new HashMap();
         result.put("result", checkByEmail);
         return result;
+    }
+
+    public void updateStore(String email, UpdateStoreDto request) {
+        User user = findByEmail(email);
+        Store store = user.getStore();
+        store.updateStore(request.getStoreName(), request.getBusinessNum());
+        //user.setStore(store);
+        userRepository.save(user);
     }
 }

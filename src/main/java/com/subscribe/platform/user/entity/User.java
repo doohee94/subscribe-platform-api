@@ -79,4 +79,8 @@ public class User extends BaseTimeEntity {
         this.store = store;
         store.setUser(this);
     }
+
+    public Store getStore() {
+        return store;
+    }
 }

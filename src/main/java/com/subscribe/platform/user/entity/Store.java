@@ -37,4 +37,9 @@ public class Store {
         this.storeName = storeName;
         this.businessNum = businessNum;
     }
+
+    public void updateStore(String storeName, String businessNum){
+        this.storeName = storeName;
+        this.businessNum = businessNum;
+    }
 }
