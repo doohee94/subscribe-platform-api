@@ -24,4 +24,10 @@ public class ServiceImage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_id")
     private Service service;
+
+    // 연관관계 메소드
+    public void setServiceImage(Service service) {
+        this.service = service;
+        service.getServiceImages().add(this);
+    }
 }

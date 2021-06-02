@@ -29,13 +29,32 @@ public class ServiceOption {
     @JoinColumn(name = "service_id")
     private Service service;
 
-    @Builder
-    public ServiceOption(String name, int price, int stock, int maxCount){
-        this.name = name;
-        this.price = price;
-        this.stock = stock;
-        this.maxCount = maxCount;
+    // 연관관계 메소드
+    public void setService(Service service){
+        this.service = service;
+        service.getServiceOptions().add(this);
     }
 
+    // === 비즈니스로직 ===
+    public void addStock(int quantity){
+        this.stock += quantity;
+    }
 
+    public void removeStock(int quantity){
+        int rest = this.stock - quantity;
+        if(rest < 0){
+            //throw new
+        }
+        this.stock = rest;
+    }
+    // ===================
+
+
+//    @Builder
+//    public ServiceOption(String name, int price, int stock, int maxCount){
+//        this.name = name;
+//        this.price = price;
+//        this.stock = stock;
+//        this.maxCount = maxCount;
+//    }
 }

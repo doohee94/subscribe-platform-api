@@ -50,9 +50,51 @@ public class Service extends BaseTimeEntity{
     List<ServiceImage> serviceImages = new ArrayList<>();
 
     @Builder
-    public Service(String name, ServiceCycle serviceCycle, String availableDay){
+    public Service(String name, ServiceCycle serviceCycle, String availableDay, List<ServiceOption> serviceOptions, List<ServiceImage> serviceImages, List<ServiceCategory> serviceCategories){
         this.name = name;
         this.serviceCycle = serviceCycle;
         this.availableDay = availableDay;
+
+        for(ServiceOption serviceOption : serviceOptions){
+            this.addServiceOption(serviceOption);
+        }
+        for(ServiceImage serviceImage : serviceImages){
+            this.addServiceImage(serviceImage);
+        }
+        for(ServiceCategory serviceCategory : serviceCategories){
+            this.addServiceCategory(serviceCategory);
+        }
     }
+
+    // ===== 연관관계 메소드 =====
+    public void addServiceOption(ServiceOption serviceOption){
+        serviceOptions.add(serviceOption);
+        serviceOption.setService(this);
+    }
+
+    public void addServiceImage(ServiceImage serviceImage){
+        serviceImages.add(serviceImage);
+        serviceImage.setServiceImage(this);
+    }
+
+    public void addServiceCategory(ServiceCategory serviceCategory){
+        serviceCategorys.add(serviceCategory);
+        serviceCategory.setService(this);
+    }
+    // ========================
+
+    // 서비스 생성 메소드
+//    public Service createService(List<ServiceOption> serviceOptions, List<ServiceImage> serviceImages, List<ServiceCategory> serviceCategories){
+//        Service service = new Service();
+//        for(ServiceOption serviceOption : serviceOptions){
+//            service.addServiceOption(serviceOption);
+//        }
+//        for(ServiceImage serviceImage : serviceImages){
+//            service.addServiceImage(serviceImage);
+//        }
+//        for(ServiceCategory serviceCategory : serviceCategories){
+//            service.addServiceCategory(serviceCategory);
+//
+//        return service;
+//    }
 }

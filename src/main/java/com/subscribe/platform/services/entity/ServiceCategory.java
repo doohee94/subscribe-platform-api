@@ -24,4 +24,11 @@ public class ServiceCategory {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    public void setService(Service service){
+        this.service = service;
+    }
+
+    public void setCategory(Category category){
+        this.category = category;
+    }
 }
