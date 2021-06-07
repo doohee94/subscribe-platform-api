@@ -32,10 +32,6 @@ public class Category {
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private List<Category> children = new ArrayList<>();
 
-    public void setCategory(String name){
-        this.name = name;
-    }
-
     public void setParentCategory(Category category){
         this.parent = category;
     }

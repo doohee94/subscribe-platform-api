@@ -23,11 +23,11 @@ public abstract class BaseTimeEntity {
 
     @LastModifiedDate
     private LocalDateTime lastModifiedDate;
-
-    @CreatedBy
-    @Column(updatable = false)
-    private String createdBy;   // 등록자
-
-    @LastModifiedBy
-    private String lastModifiedBy;  // 수정자
+//
+//    @CreatedBy
+//    @Column(updatable = false)
+//    private String createdBy;   // 등록자
+//
+//    @LastModifiedBy
+//    private String lastModifiedBy;  // 수정자
 }

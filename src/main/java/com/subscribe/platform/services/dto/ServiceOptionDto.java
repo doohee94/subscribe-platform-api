@@ -7,4 +7,5 @@ public class ServiceOptionDto {
     private String optionName;
     private int price;
     private int stock;
+    private int maxCount;
 }

@@ -11,6 +11,7 @@ public class CreateServiceDto {
     private String serviceName;
     private String serviceCycle;
     private String availableDay;
-    private List<ServiceOptionDto> serviceOption;
-
+    private List<ServiceOptionDto> serviceOptions;
+    private List<ServiceImageDto> serviceImages;
+    private List<CategoryDto> serviceCategories;
 }

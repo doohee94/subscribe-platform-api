@@ -15,7 +15,7 @@ import java.util.List;
 @Table(name = "service")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Service extends BaseTimeEntity{
+public class Services extends BaseTimeEntity{
 
     @Id @GeneratedValue
     @Column(name = "service_id")
@@ -49,10 +49,36 @@ public class Service extends BaseTimeEntity{
     @OneToMany(mappedBy = "service")
     List<ServiceImage> serviceImages = new ArrayList<>();
 
+    // ===== 연관관계 메소드 모음 =====
+    public void addServiceOption(ServiceOption serviceOption){
+        serviceOptions.add(serviceOption);
+        serviceOption.setServices(this);
+    }
+
+    public void addServiceImage(ServiceImage serviceImage){
+        serviceImages.add(serviceImage);
+        serviceImage.setServices(this);
+    }
+
+    public void addServiceCategory(ServiceCategory serviceCategory){
+        serviceCategorys.add(serviceCategory);
+        serviceCategory.setServices(this);
+    }
+    // =============================
+
     @Builder
-    public Service(String name, ServiceCycle serviceCycle, String availableDay){
+    public Services(String name, ServiceCycle serviceCycle, String availableDay, List<ServiceOption> serviceOptions, List<ServiceImage> serviceImages, List<ServiceCategory> serviceCategories){
         this.name = name;
         this.serviceCycle = serviceCycle;
         this.availableDay = availableDay;
+        for(ServiceOption serviceOption : serviceOptions){
+            addServiceOption(serviceOption);
+        }
+        for(ServiceImage serviceimage : serviceImages){
+            addServiceImage(serviceimage);
+        }
+        for(ServiceCategory serviceCategory : serviceCategories){
+            addServiceCategory(serviceCategory);
+        }
     }
 }
