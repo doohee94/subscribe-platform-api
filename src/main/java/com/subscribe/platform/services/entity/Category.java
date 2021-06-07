@@ -36,6 +36,7 @@ public class Category {
         this.parent = category;
     }
 
+    // 연관관계 메소드
     public void addChildCategory(Category category){
         children.add(category);
         parent.setParentCategory(this);
