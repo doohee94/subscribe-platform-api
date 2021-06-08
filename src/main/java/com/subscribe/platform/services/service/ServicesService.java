@@ -20,9 +20,7 @@ public class ServicesService {
     /**
      * 서비스 등록
      */
-    public void createService(){
-
-        CreateServiceDto dto = new CreateServiceDto();
+    public void createService(CreateServiceDto dto){
 
         // 서비스 옵션 담기
         List<ServiceOption> serviceOptionList = new ArrayList<>();
@@ -51,10 +49,14 @@ public class ServicesService {
         // 서비스 카테고리 담기
         List<ServiceCategory> serviceCategoryList = new ArrayList<>();
         for(CategoryDto categoryDto : dto.getServiceCategories()){
-
+            Category category = Category.builder()
+                    .name(categoryDto.getName())
+                    .build();
+            ServiceCategory sc = ServiceCategory.createServiceCategory(category);
+            serviceCategoryList.add(sc);
         }
 
-
+        // 서비스 생성
         Services services = Services.builder()
                 .name(dto.getServiceName())
                 .serviceCycle("MONTH".equals(dto.getServiceCycle()) ? ServiceCycle.MONTH : ServiceCycle.WEEK)
@@ -64,6 +66,7 @@ public class ServicesService {
                 .serviceCategories(serviceCategoryList)
                 .build();
 
+        // 서비스 저장
         servicesRepository.save(services);
     }
 }

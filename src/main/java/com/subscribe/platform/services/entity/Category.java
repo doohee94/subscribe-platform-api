@@ -42,4 +42,8 @@ public class Category {
         parent.setParentCategory(this);
     }
 
+    @Builder
+    public Category(String name) {
+        this.name = name;
+    }
 }
