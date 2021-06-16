@@ -25,25 +25,21 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<ServiceCategory> serviceCategory;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    private Category parent;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "parent_id")
+//    private Category parent;
+//
+//    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+//    private List<Category> children = new ArrayList<>();
+//
+//    public void setParentCategory(Category category){
+//        this.parent = category;
+//    }
+//
+//    // 연관관계 메소드
+//    public void addChildCategory(Category category){
+//        children.add(category);
+//        parent.setParentCategory(this);
+//    }
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
-    private List<Category> children = new ArrayList<>();
-
-    public void setParentCategory(Category category){
-        this.parent = category;
-    }
-
-    // 연관관계 메소드
-    public void addChildCategory(Category category){
-        children.add(category);
-        parent.setParentCategory(this);
-    }
-
-    @Builder
-    public Category(String name) {
-        this.name = name;
-    }
 }

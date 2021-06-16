@@ -31,9 +31,10 @@ public class ServiceCategory {
         this.category = category;
     }
     // 생성 메소드
-    public static ServiceCategory createServiceCategory(Category category){
+    public static ServiceCategory createServiceCategory(Services services, Category category){
         ServiceCategory serviceCategory = new ServiceCategory();
         serviceCategory.setCategory(category);
+        serviceCategory.setServices(services);
         return serviceCategory;
     }
 }

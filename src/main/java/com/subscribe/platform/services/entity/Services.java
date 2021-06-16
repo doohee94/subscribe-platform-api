@@ -38,15 +38,15 @@ public class Services extends BaseTimeEntity{
     private DetailContents detailContents;
 
    // 서비스 옵션
-    @OneToMany(mappedBy = "service")
+    @OneToMany(mappedBy = "services", cascade = CascadeType.ALL)
     private List<ServiceOption> serviceOptions = new ArrayList<>();
 
     // 카테고리
-    @OneToMany(mappedBy = "service", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "services", cascade = CascadeType.ALL)
     List<ServiceCategory> serviceCategorys = new ArrayList<>();
 
     // 서비스 이미지
-    @OneToMany(mappedBy = "service")
+    @OneToMany(mappedBy = "services", cascade = CascadeType.ALL)
     List<ServiceImage> serviceImages = new ArrayList<>();
 
     // ===== 연관관계 메소드 모음 =====
@@ -60,14 +60,14 @@ public class Services extends BaseTimeEntity{
         serviceImage.setServices(this);
     }
 
-    public void addServiceCategory(ServiceCategory serviceCategory){
+    public void addServiceCategory(Category category){
+        ServiceCategory serviceCategory = ServiceCategory.createServiceCategory(this, category);
         serviceCategorys.add(serviceCategory);
-        serviceCategory.setServices(this);
     }
     // =============================
 
     @Builder
-    public Services(String name, ServiceCycle serviceCycle, String availableDay, List<ServiceOption> serviceOptions, List<ServiceImage> serviceImages, List<ServiceCategory> serviceCategories){
+    public Services(String name, ServiceCycle serviceCycle, String availableDay, List<ServiceOption> serviceOptions, List<ServiceImage> serviceImages, List<Category> categories){
         this.name = name;
         this.serviceCycle = serviceCycle;
         this.availableDay = availableDay;
@@ -77,8 +77,8 @@ public class Services extends BaseTimeEntity{
         for(ServiceImage serviceimage : serviceImages){
             addServiceImage(serviceimage);
         }
-        for(ServiceCategory serviceCategory : serviceCategories){
-            addServiceCategory(serviceCategory);
+        for(Category category : categories){
+            addServiceCategory(category);
         }
     }
 }

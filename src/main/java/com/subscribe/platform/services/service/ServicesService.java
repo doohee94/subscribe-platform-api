@@ -5,17 +5,20 @@ import com.subscribe.platform.services.dto.CreateServiceDto;
 import com.subscribe.platform.services.dto.ServiceImageDto;
 import com.subscribe.platform.services.dto.ServiceOptionDto;
 import com.subscribe.platform.services.entity.*;
+import com.subscribe.platform.services.repository.CategoryRepository;
 import com.subscribe.platform.services.repository.ServicesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ServicesService {
     private final ServicesRepository servicesRepository;
+    private final CategoryRepository categoryRepository;
 
     /**
      * 서비스 등록
@@ -37,6 +40,7 @@ public class ServicesService {
         // 서비스 이미지 담기
         List<ServiceImage> serviceImageList = new ArrayList<>();
         for(ServiceImageDto serviceImageDto : dto.getServiceImages()){
+
             ServiceImage image = ServiceImage.builder()
                     .name(serviceImageDto.getImageName())
                     .fakeName(serviceImageDto.getFakeName())
@@ -47,13 +51,14 @@ public class ServicesService {
         }
 
         // 서비스 카테고리 담기
-        List<ServiceCategory> serviceCategoryList = new ArrayList<>();
+        List<Category> categoryList = new ArrayList<>();
         for(CategoryDto categoryDto : dto.getServiceCategories()){
-            Category category = Category.builder()
-                    .name(categoryDto.getName())
-                    .build();
-            ServiceCategory sc = ServiceCategory.createServiceCategory(category);
-            serviceCategoryList.add(sc);
+            Optional<Category> category = categoryRepository.findById(categoryDto.getCategoryId());
+
+            categoryList.add(category.get());
+
+//            ServiceCategory sc = ServiceCategory.createServiceCategory(category);
+//            serviceCategoryList.add(sc);
         }
 
         // 서비스 생성
@@ -63,7 +68,7 @@ public class ServicesService {
                 .availableDay(dto.getAvailableDay())
                 .serviceOptions(serviceOptionList)
                 .serviceImages(serviceImageList)
-                .serviceCategories(serviceCategoryList)
+                .categories(categoryList)
                 .build();
 
         // 서비스 저장
