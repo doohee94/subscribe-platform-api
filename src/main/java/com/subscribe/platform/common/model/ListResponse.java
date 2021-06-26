@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ListResponse<T> extends ListResponseModel<T> {
 
-    public ListResponse(List<T> content) {
-        super(content);
+    public ListResponse(List<T> content, long totCnt) {
+        super(content, totCnt);
     }
 }

@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity(name = "service_image")
+@Entity
+@Table(name = "service_image")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ServiceImage {
@@ -21,6 +22,7 @@ public class ServiceImage {
     @Column(name = "image_name")
     private String name;
     private String fakeName;
+    private String extensionName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_id")
@@ -31,10 +33,11 @@ public class ServiceImage {
     }
 
     @Builder
-    public ServiceImage(ImageType imageType, int imageSeq, String name, String fakeName) {
+    public ServiceImage(ImageType imageType, int imageSeq, String name, String fakeName, String extensionName) {
         this.imageType = imageType;
         this.imageSeq = imageSeq;
         this.name = name;
         this.fakeName = fakeName;
+        this.extensionName = extensionName;
     }
 }

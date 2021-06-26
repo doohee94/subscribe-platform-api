@@ -1,6 +1,8 @@
 package com.subscribe.platform.services.entity;
 
 import com.subscribe.platform.common.entity.BaseTimeEntity;
+import com.subscribe.platform.user.entity.Customer;
+import com.subscribe.platform.user.entity.Store;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,10 +36,15 @@ public class Services extends BaseTimeEntity{
 
     private LocalDateTime serviceDate;
 
-    @Embedded
-    private DetailContents detailContents;
+    @Lob
+    private String detailContents;
 
-   // 서비스 옵션
+    // 판매자
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    private Store store;
+
+    // 서비스 옵션
     @OneToMany(mappedBy = "services", cascade = CascadeType.ALL)
     private List<ServiceOption> serviceOptions = new ArrayList<>();
 
@@ -50,6 +57,11 @@ public class Services extends BaseTimeEntity{
     List<ServiceImage> serviceImages = new ArrayList<>();
 
     // ===== 연관관계 메소드 모음 =====
+    public void setStore(Store store){
+        this.store = store;
+//        store.setServiceList(this);
+    }
+
     public void addServiceOption(ServiceOption serviceOption){
         serviceOptions.add(serviceOption);
         serviceOption.setServices(this);
@@ -67,10 +79,12 @@ public class Services extends BaseTimeEntity{
     // =============================
 
     @Builder
-    public Services(String name, ServiceCycle serviceCycle, String availableDay, List<ServiceOption> serviceOptions, List<ServiceImage> serviceImages, List<Category> categories){
+    public Services(String name, ServiceCycle serviceCycle, String availableDay, String detailContents, List<ServiceOption> serviceOptions, List<ServiceImage> serviceImages, List<Category> categories){
         this.name = name;
         this.serviceCycle = serviceCycle;
         this.availableDay = availableDay;
+        this.detailContents = detailContents;
+
         for(ServiceOption serviceOption : serviceOptions){
             addServiceOption(serviceOption);
         }

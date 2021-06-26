@@ -4,12 +4,9 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
-public class ServiceImageDto {
+public class CreateServiceImageDto {
 
     private String imageType;
     private int imageSeq;
-    private String imageName;
-    private String fakeName;
-
     private MultipartFile imageFile;
 }
