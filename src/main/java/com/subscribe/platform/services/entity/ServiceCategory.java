@@ -18,10 +18,23 @@ public class ServiceCategory {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="service_id")
-    private Service service;
+    private Services services;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
+    public void setServices(Services services){
+        this.services = services;
+    }
+    private void setCategory(Category category){
+        this.category = category;
+    }
+    // 생성 메소드
+    public static ServiceCategory createServiceCategory(Services services, Category category){
+        ServiceCategory serviceCategory = new ServiceCategory();
+        serviceCategory.setCategory(category);
+        serviceCategory.setServices(services);
+        return serviceCategory;
+    }
 }

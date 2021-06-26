@@ -27,7 +27,7 @@ public class ServiceOption {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_id")
-    private Service service;
+    private Services services;
 
     @Builder
     public ServiceOption(String name, int price, int stock, int maxCount){
@@ -37,5 +37,7 @@ public class ServiceOption {
         this.maxCount = maxCount;
     }
 
-
+    public void setServices(Services services){
+        this.services = services;
+    }
 }
