@@ -1,4 +1,4 @@
-package com.subscribe.platform.global.error.exception;
+package com.subscribe.platform.config.error.exception;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -14,15 +14,9 @@ public enum ErrorCode {
     HANDLE_ACCESS_DENIED(403, "C006", "Access is Denied"),
 
     //auth
-    JWT_EXPIRED(401,"A001", "JWT Token expired"),
-
-    // user
-    EMAIL_DUPLICATION(400, "U001", "Email is Duplication"),
-    LOGIN_INPUT_INVALID(400, "M002", "Login input is invalid"),
-
-    // Coupon
-    COUPON_ALREADY_USE(400, "CO001", "Coupon was already used"),
-    COUPON_EXPIRE(400, "CO002", "Coupon was already expired")
+    INVALID_TOKEN(401, "UNAUTHORIZED", "invalid token"),
+    JWT_EXPIRED(401,"UNAUTHORIZED", "JWT Token expired"),
+    BAD_CREDENTIALS(401, "UNAUTHORIZED", "login fail");
 
     ;
     private final String code;

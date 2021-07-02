@@ -3,6 +3,7 @@ package com.subscribe.platform.services.service;
 import com.subscribe.platform.common.handler.FileHandler;
 import com.subscribe.platform.common.model.FileInfo;
 import com.subscribe.platform.common.model.ListResponse;
+import com.subscribe.platform.common.properties.GlobalProperties;
 import com.subscribe.platform.services.dto.*;
 import com.subscribe.platform.services.entity.*;
 import com.subscribe.platform.services.repository.CategoryRepository;
@@ -16,7 +17,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +29,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ServicesService {
+
+    private final FileHandler fileHandler;
+
     private final ServicesRepository servicesRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
@@ -33,7 +40,8 @@ public class ServicesService {
     /**
      * 서비스 등록
      */
-    public void createService(CreateServiceDto dto){
+    @Transactional
+    public void createService(CreateServiceDto dto) throws IOException {
 
         // 서비스 옵션 담기
         List<ServiceOption> serviceOptionList = new ArrayList<>();
@@ -47,11 +55,22 @@ public class ServicesService {
             serviceOptionList.add(option);
         }
 
+        // 서비스 카테고리 담기
+        List<Category> categoryList = new ArrayList<>();
+        for(CreateCategoryDto categoryDto : dto.getCategories()){
+            Optional<Category> category = categoryRepository.findById(categoryDto.getCategoryId());
+
+            Optional.of(category).ifPresent((value) -> {
+                categoryList.add(value.orElseThrow(EntityNotFoundException::new));
+            });
+//            ServiceCategory sc = ServiceCategory.createServiceCategory(category);
+//            serviceCategoryList.add(sc);
+        }
+
         // 서비스 이미지 담기
         List<ServiceImage> serviceImageList = new ArrayList<>();
         for(CreateServiceImageDto serviceImageDto : dto.getServiceImages()){
 
-            FileHandler fileHandler = new FileHandler();
             FileInfo fileInfo = fileHandler.getFileInfo(serviceImageDto.getImageFile());
 
             ServiceImage image = ServiceImage.builder()
@@ -64,22 +83,12 @@ public class ServicesService {
             serviceImageList.add(image);
         }
 
-        // 서비스 카테고리 담기
-        List<Category> categoryList = new ArrayList<>();
-        for(CreateCategoryDto categoryDto : dto.getCategories()){
-            Optional<Category> category = categoryRepository.findById(categoryDto.getCategoryId());
-
-            categoryList.add(category.get());
-
-//            ServiceCategory sc = ServiceCategory.createServiceCategory(category);
-//            serviceCategoryList.add(sc);
-        }
-
         // 서비스 생성
         Services services = Services.builder()
                 .name(dto.getServiceName())
                 .serviceCycle("MONTH".equals(dto.getServiceCycle()) ? ServiceCycle.MONTH : ServiceCycle.WEEK)
                 .availableDay(dto.getAvailableDay())
+                .detailContents(dto.getDetailContents())
                 .serviceOptions(serviceOptionList)
                 .serviceImages(serviceImageList)
                 .categories(categoryList)
@@ -114,7 +123,7 @@ public class ServicesService {
         Page<Services> serviceList = servicesRepository.findByStore_Id(storeId, pageRequest);
 
         List<ResServiceListDto> result = serviceList.stream()
-                .map(m -> new ResServiceListDto(m))
+                .map(m -> new ResServiceListDto(m, new GlobalProperties().getFileUploadPath()))
                 .collect(Collectors.toList());
 
         return new ListResponse(result, serviceList.getTotalElements());

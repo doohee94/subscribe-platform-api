@@ -3,10 +3,12 @@ spring:
     database: mysql
     hibernate:
       ddl-auto: update
-      default_batch_fetch_size: 500
-      format_sql: true
-    show-sql: true
-    open-in-view: false
+    properties:
+      hibernate:
+        default_batch_fetch_size: 500
+        format_sql: true
+#        show-sql: true
+        open-in-view: false
 
 
 jwt:
@@ -14,3 +16,8 @@ jwt:
     secret-key: "hello"
     expTime: 1800000
     issuer: "dohee"
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+#    org.hibernate.type: trace
