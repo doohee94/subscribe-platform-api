@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Services extends BaseTimeEntity{
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "service_id")
     private Long id;
 
@@ -31,10 +31,11 @@ public class Services extends BaseTimeEntity{
 
     private String availableDay; // 판매자가 가능한 배송일, 요일 (쉼표로 구분)
 
-    @Enumerated(EnumType.STRING)
-    private ServiceDay serviceDay;
-
-    private LocalDateTime serviceDate;
+    // 이건 서비스테이블이 아니라 구독테이블에 들어가야할거같음
+//    @Enumerated(EnumType.STRING)
+//    private ServiceDay serviceDay;
+//
+//    private LocalDateTime serviceDate;
 
     @Lob
     private String detailContents;

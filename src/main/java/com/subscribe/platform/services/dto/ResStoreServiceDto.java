@@ -5,13 +5,14 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class CreateServiceDto {
+public class ResStoreServiceDto {
 
+    private Long serviceId;
     private String serviceName;
     private String serviceCycle;
     private String availableDay;
     private String detailContents;
-    private List<CreateServiceOptionDto> serviceOptions;
-    private List<CreateServiceImageDto> serviceImages;
-    private List<CreateCategoryDto> categories;
+    private List<CreateServiceOptionDto> seviceOptions;
+    private List<ResServiceImageDto> serviceImages;
+    private List<ResCategoryDto> categories;
 }

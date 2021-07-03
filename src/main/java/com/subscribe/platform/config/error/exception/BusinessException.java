@@ -1,4 +1,4 @@
-package com.subscribe.platform.global.error.exception;
+package com.subscribe.platform.config.error.exception;
 
 public class BusinessException extends RuntimeException {
 

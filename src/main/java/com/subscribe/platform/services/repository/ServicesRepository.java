@@ -16,5 +16,8 @@ public interface ServicesRepository extends JpaRepository<Services, Long> {
     @EntityGraph(attributePaths = {"serviceImages"})
     Page<Services> findByStore_Id(Long storeId, Pageable pageable);
 
+    @Query("SELECT s FROM Services s JOIN ServiceImage si ON s.id = si.services.id WHERE s.store.id = :storeId AND si.imageType = 'THUMBNAIL' AND si.imageSeq = 1")
+    Page<Services> findByJoinImage(Long storeId, Pageable pageable);
+
 
 }

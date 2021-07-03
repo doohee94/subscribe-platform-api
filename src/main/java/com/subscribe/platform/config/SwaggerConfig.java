@@ -1,6 +1,6 @@
 package com.subscribe.platform.config;
 
-import com.subscribe.platform.global.security.config.SecurityConfig;
+import com.subscribe.platform.config.securityAndJwtConfig.SecurityConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;

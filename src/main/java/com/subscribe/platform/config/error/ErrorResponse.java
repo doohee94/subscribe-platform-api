@@ -1,6 +1,6 @@
-package com.subscribe.platform.global.error;
+package com.subscribe.platform.config.error;
 
-import com.subscribe.platform.global.error.exception.ErrorCode;
+import com.subscribe.platform.config.error.exception.ErrorCode;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

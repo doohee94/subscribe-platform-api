@@ -1,11 +1,14 @@
-package com.subscribe.platform.global.error;
+package com.subscribe.platform.config.error;
 
-import com.subscribe.platform.global.error.exception.BusinessException;
-import com.subscribe.platform.global.error.exception.ErrorCode;
+import com.subscribe.platform.config.error.exception.BusinessException;
+import com.subscribe.platform.config.error.exception.ErrorCode;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.bind.BindException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -71,6 +74,36 @@ public class GlobalExceptionHandler {
         log.error("handleAccessDeniedException", e);
         final ErrorResponse response = ErrorResponse.of(ErrorCode.HANDLE_ACCESS_DENIED);
         return new ResponseEntity<>(response, HttpStatus.valueOf(ErrorCode.HANDLE_ACCESS_DENIED.getStatus()));
+    }
+
+    /**
+     * 로그인 실패
+     */
+    @ExceptionHandler(BadCredentialsException.class)
+    protected ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException e){
+        log.error("handleBadCredentialsException", e);
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.BAD_CREDENTIALS);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(ErrorCode.BAD_CREDENTIALS.getCode()));
+    }
+
+    /**
+     * 토큰 인증 에러
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    protected ResponseEntity<ErrorResponse> handleUnAuthorizationException(AuthenticationException e){
+        log.error("handleUnAuthorizationException", e);
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_TOKEN);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(ErrorCode.INVALID_TOKEN.getCode()));
+    }
+
+    /**
+     * 토큰 만료 에러
+     */
+    @ExceptionHandler(ExpiredJwtException.class)
+    protected ResponseEntity<ErrorResponse> handleExpiredJwtException(ExpiredJwtException e){
+        log.error("handleExpiredJwtException", e);
+        final ErrorResponse response = ErrorResponse.of(ErrorCode.JWT_EXPIRED);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(ErrorCode.JWT_EXPIRED.getCode()));
     }
 
     @ExceptionHandler(BusinessException.class)

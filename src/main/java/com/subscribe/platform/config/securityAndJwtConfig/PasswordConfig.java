@@ -1,4 +1,4 @@
-package com.subscribe.platform.global.security.config;
+package com.subscribe.platform.config.securityAndJwtConfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
