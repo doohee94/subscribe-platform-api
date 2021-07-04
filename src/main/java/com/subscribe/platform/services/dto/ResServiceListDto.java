@@ -17,8 +17,8 @@ public class ResServiceListDto {
         this.serviceName = services.getName();
         this.thumbnailImage = filePath+
                 services.getServiceImages().stream()
-                .filter(t->t.getImageType() == ImageType.THUMBNAIL)
-                .filter(t->t.getImageSeq() == 1)
+//                .filter(t->t.getImageType() == ImageType.THUMBNAIL)
+//                .filter(t->t.getImageSeq() == 1)
 //                .map(t->t.getFakeName()+t.getExtensionName())
                 .map(t->t.getFakeName()+t.getExtensionName())
                 .findFirst()

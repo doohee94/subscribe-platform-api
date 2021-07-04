@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "service")
@@ -47,15 +49,15 @@ public class Services extends BaseTimeEntity{
 
     // 서비스 옵션
     @OneToMany(mappedBy = "services", cascade = CascadeType.ALL)
-    private List<ServiceOption> serviceOptions = new ArrayList<>();
+    private Set<ServiceOption> serviceOptions = new HashSet<>();
 
     // 카테고리
     @OneToMany(mappedBy = "services", cascade = CascadeType.ALL)
-    List<ServiceCategory> serviceCategorys = new ArrayList<>();
+    private Set<ServiceCategory> serviceCategories = new HashSet<>();
 
     // 서비스 이미지
     @OneToMany(mappedBy = "services", cascade = CascadeType.ALL)
-    List<ServiceImage> serviceImages = new ArrayList<>();
+    private Set<ServiceImage> serviceImages = new HashSet<>();
 
     // ===== 연관관계 메소드 모음 =====
     public void setStore(Store store){
@@ -75,7 +77,7 @@ public class Services extends BaseTimeEntity{
 
     public void addServiceCategory(Category category){
         ServiceCategory serviceCategory = ServiceCategory.createServiceCategory(this, category);
-        serviceCategorys.add(serviceCategory);
+        serviceCategories.add(serviceCategory);
     }
     // =============================
 

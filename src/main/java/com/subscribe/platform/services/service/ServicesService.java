@@ -120,7 +120,7 @@ public class ServicesService {
         User user = userRepository.findByEmail(email);
         Long storeId = user.getStore().getId();
 
-        Page<Services> serviceList = servicesRepository.findByStore_Id(storeId, pageRequest);
+        Page<Services> serviceList = servicesRepository.findListWithJoinImage(storeId, pageRequest);
 
         List<ResServiceListDto> result = serviceList.stream()
                 .map(m -> new ResServiceListDto(m, new GlobalProperties().getFileUploadPath()))
@@ -129,6 +129,9 @@ public class ServicesService {
         return new ListResponse(result, serviceList.getTotalElements());
     }
 
-    public void getStoreServiceDetail(Long serviceId) {
+    public ResStoreServiceDto getStoreServiceDetail(Long serviceId) {
+
+        Optional<Services> serviceDetail = servicesRepository.findServiceDetail(serviceId);
+        return new ResStoreServiceDto(serviceDetail.orElse(null));
     }
 }
