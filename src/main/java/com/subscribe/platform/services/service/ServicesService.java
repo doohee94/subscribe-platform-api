@@ -7,6 +7,8 @@ import com.subscribe.platform.common.properties.GlobalProperties;
 import com.subscribe.platform.services.dto.*;
 import com.subscribe.platform.services.entity.*;
 import com.subscribe.platform.services.repository.CategoryRepository;
+import com.subscribe.platform.services.repository.ServiceCategoryRepository;
+import com.subscribe.platform.services.repository.ServicesQuerydslRepository;
 import com.subscribe.platform.services.repository.ServicesRepository;
 import com.subscribe.platform.user.entity.Store;
 import com.subscribe.platform.user.entity.User;
@@ -21,9 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 public class ServicesService {
 
     private final FileHandler fileHandler;
+    private final GlobalProperties globalProperties;
 
     private final ServicesRepository servicesRepository;
     private final CategoryRepository categoryRepository;
@@ -123,15 +124,30 @@ public class ServicesService {
         Page<Services> serviceList = servicesRepository.findListWithJoinImage(storeId, pageRequest);
 
         List<ResServiceListDto> result = serviceList.stream()
-                .map(m -> new ResServiceListDto(m, new GlobalProperties().getFileUploadPath()))
+                .map(m -> new ResServiceListDto(m, globalProperties.getFileUploadPath()))
                 .collect(Collectors.toList());
 
         return new ListResponse(result, serviceList.getTotalElements());
     }
 
+    /**
+     * 판매자) 서비스 상세 조회
+     */
     public ResStoreServiceDto getStoreServiceDetail(Long serviceId) {
 
         Optional<Services> serviceDetail = servicesRepository.findServiceDetail(serviceId);
-        return new ResStoreServiceDto(serviceDetail.orElse(null));
+
+        // category는 지연로딩으로 가져와야해서 여기서 dto까지 조회해서 보낸다.
+        Set<ServiceCategory> serviceCategories = serviceDetail.orElseThrow(EntityNotFoundException::new)
+                .getServiceCategories();
+        List<ResCategoryDto> categoryDtos = serviceCategories.stream()
+                .map(o -> ResCategoryDto.builder()
+                        .categoryId(o.getCategory().getId())
+                        .categoryName(o.getCategory().getName())
+                        .build())
+                .collect(Collectors.toList());
+
+        return new ResStoreServiceDto(serviceDetail.orElseThrow(EntityNotFoundException::new), categoryDtos);
     }
+
 }

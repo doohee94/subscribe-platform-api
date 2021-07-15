@@ -1,8 +1,6 @@
 package com.subscribe.platform.services.dto;
 
-import com.subscribe.platform.services.entity.ServiceImage;
-import com.subscribe.platform.services.entity.ServiceOption;
-import com.subscribe.platform.services.entity.Services;
+import com.subscribe.platform.services.entity.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -23,7 +21,7 @@ public class ResStoreServiceDto {
     private List<ResServiceImageDto> serviceImages;
     private List<ResCategoryDto> categories;
 
-    public ResStoreServiceDto(Services services){
+    public ResStoreServiceDto(Services services, List<ResCategoryDto> categoryDtos){
         this.serviceId = services.getId();
         this.serviceName = services.getName();
         this.serviceCycle = services.getServiceCycle().toString();
@@ -47,11 +45,6 @@ public class ResStoreServiceDto {
                         .build()
                 ).collect(Collectors.toList());
 
-//        this.categories = services.getServiceCategories().stream()
-//                .map(o -> ResCategoryDto.builder()
-//                        .categoryId(o.getId())
-//                        .categoryName(o.getCategory().getName())
-//                        .build()
-//                ).collect(Collectors.toList());
+        this.categories = categoryDtos;
     }
 }

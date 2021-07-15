@@ -33,7 +33,7 @@ public class ServicesController {
     /**
      * 판매자 서비스 상세정보 조회
      */
-    @GetMapping("/getServiceDetail")
+    @GetMapping("/store/getServiceDetail")
     public ResStoreServiceDto getStoreServiceDetail(@RequestParam Long serviceId){
         return servicesService.getStoreServiceDetail(serviceId);
     }
