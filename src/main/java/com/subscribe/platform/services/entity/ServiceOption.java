@@ -1,5 +1,7 @@
 package com.subscribe.platform.services.entity;
 
+import com.subscribe.platform.services.dto.UpdateServiceDto;
+import com.subscribe.platform.services.dto.UpdateServiceOptionDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,7 +32,8 @@ public class ServiceOption {
     private Services services;
 
     @Builder
-    public ServiceOption(String name, int price, int stock, int maxCount){
+    public ServiceOption(Long id, String name, int price, int stock, int maxCount){
+        this.id = id;
         this.name = name;
         this.price = price;
         this.stock = stock;
@@ -39,5 +42,12 @@ public class ServiceOption {
 
     public void setServices(Services services){
         this.services = services;
+    }
+
+    public void updateServiceOption(UpdateServiceOptionDto optionDto){
+        this.name = optionDto.getOptionName();
+        this.price = optionDto.getPrice();
+        this.stock = optionDto.getStock();
+        this.maxCount = optionDto.getMaxCount();
     }
 }

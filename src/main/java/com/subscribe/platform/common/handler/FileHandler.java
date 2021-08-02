@@ -18,6 +18,9 @@ public class FileHandler {
 
     private final GlobalProperties globalProperties;
 
+    /**
+     * 이미지파일에서 파일이름, 저장할이름, 확장자 추출
+     */
     public FileInfo getFileInfo(MultipartFile file) throws IOException{
 
         String contentType = file.getContentType();
@@ -51,7 +54,9 @@ public class FileHandler {
                 .build();
     }
 
-    // 파일 저장
+    /**
+     * 로컬 경로에 파일 저장
+     */
     public void saveFile(MultipartFile multipartFile, String fileFakeName, String originalFileExtension) throws IOException {
 
         // 저장할 위치의 디렉토리가 존지하지 않을 경우 생성
@@ -62,6 +67,15 @@ public class FileHandler {
         }
         multipartFile.transferTo(file);
 
+    }
+
+    /**
+     * 로컬 경로에 파일 삭제
+     */
+    public boolean deleteFile(String fakeFilename){
+        File file = new File(globalProperties.getFileUploadPath() + fakeFilename);
+
+        return file.delete();
     }
 
 }

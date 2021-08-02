@@ -21,4 +21,7 @@ public interface ServicesRepository extends JpaRepository<Services, Long> {
     @EntityGraph(attributePaths = {"serviceImages","serviceOptions", "serviceCategories"})
     @Query("SELECT s FROM Services s WHERE s.id = :serviceId")
     Optional<Services> findServiceDetail(@Param("serviceId") Long serviceId);
+
+    void deleteByIdAndStore_Id(Long id, Long storeId);
+
 }

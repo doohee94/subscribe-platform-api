@@ -6,10 +6,7 @@ import com.subscribe.platform.common.model.ListResponse;
 import com.subscribe.platform.common.properties.GlobalProperties;
 import com.subscribe.platform.services.dto.*;
 import com.subscribe.platform.services.entity.*;
-import com.subscribe.platform.services.repository.CategoryRepository;
-import com.subscribe.platform.services.repository.ServiceCategoryRepository;
-import com.subscribe.platform.services.repository.ServicesQuerydslRepository;
-import com.subscribe.platform.services.repository.ServicesRepository;
+import com.subscribe.platform.services.repository.*;
 import com.subscribe.platform.user.entity.Store;
 import com.subscribe.platform.user.entity.User;
 import com.subscribe.platform.user.repository.StoreRepository;
@@ -22,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,6 +36,10 @@ public class ServicesService {
     private final UserRepository userRepository;
     private final StoreRepository storeRepository;
 
+    private final ServiceOptionRepository serviceOptionRepository;
+    private final ServiceImageRepository serviceImageRepository;
+    private final ServiceCategoryRepository serviceCategoryRepository;
+
     /**
      * 서비스 등록
      */
@@ -46,7 +48,7 @@ public class ServicesService {
 
         // 서비스 옵션 담기
         List<ServiceOption> serviceOptionList = new ArrayList<>();
-        for(CreateServiceOptionDto serviceOptionDto : dto.getServiceOptions()){
+        for (CreateServiceOptionDto serviceOptionDto : dto.getServiceOptions()) {
             ServiceOption option = ServiceOption.builder()
                     .name(serviceOptionDto.getOptionName())
                     .price(serviceOptionDto.getPrice())
@@ -58,19 +60,17 @@ public class ServicesService {
 
         // 서비스 카테고리 담기
         List<Category> categoryList = new ArrayList<>();
-        for(CreateCategoryDto categoryDto : dto.getCategories()){
+        for (CreateCategoryDto categoryDto : dto.getCategories()) {
             Optional<Category> category = categoryRepository.findById(categoryDto.getCategoryId());
 
             Optional.of(category).ifPresent((value) -> {
                 categoryList.add(value.orElseThrow(EntityNotFoundException::new));
             });
-//            ServiceCategory sc = ServiceCategory.createServiceCategory(category);
-//            serviceCategoryList.add(sc);
         }
 
         // 서비스 이미지 담기
         List<ServiceImage> serviceImageList = new ArrayList<>();
-        for(CreateServiceImageDto serviceImageDto : dto.getServiceImages()){
+        for (CreateServiceImageDto serviceImageDto : dto.getServiceImages()) {
 
             FileInfo fileInfo = fileHandler.getFileInfo(serviceImageDto.getImageFile());
 
@@ -110,10 +110,11 @@ public class ServicesService {
 
     /**
      * 판매자) 서비스 리스트 조회
+     *
      * @return
      */
-    public ListResponse getStoreServiceList(int pageNum, int size){
-        
+    public ListResponse getStoreServiceList(int pageNum, int size) {
+
         // 페이징 정보
         PageRequest pageRequest = PageRequest.of(pageNum, size);
 
@@ -148,6 +149,112 @@ public class ServicesService {
                 .collect(Collectors.toList());
 
         return new ResStoreServiceDto(serviceDetail.orElseThrow(EntityNotFoundException::new), categoryDtos);
+    }
+
+    /**
+     * 판매자) 서비스 수정
+     */
+    @Transactional
+    public void updateService(UpdateServiceDto updateServiceDto) throws IOException {
+
+        // 판매자 정보 조회
+
+        // 서비스 조회
+        Optional<Services> services = servicesRepository.findById(updateServiceDto.getServiceId());
+
+        // 서비스 기본정보 수정
+        services.orElseThrow(EntityNotFoundException::new)
+                .updateServices(
+                        updateServiceDto.getServiceName(),
+                        "MONTH".equals(updateServiceDto.getServiceCycle()) ? ServiceCycle.MONTH : ServiceCycle.WEEK,
+                        updateServiceDto.getAvailableDay(),
+                        updateServiceDto.getDetailContents()
+                );
+
+        // 서비스 옵션 수정
+        updateServiceDto.getServiceOptions()
+                .forEach(
+                        optionDto -> services.orElseThrow(EntityNotFoundException::new)
+                                .updateServiceOption(optionDto)
+                );
+
+        // 카테고리 삭제
+        services.orElseThrow(EntityNotFoundException::new)
+                .deleteCategory();
+        // 카테고리 수정
+        List<Long> categoryIds = updateServiceDto.getCategories().stream()
+                .map(o -> o.getCategoryId()).collect(Collectors.toList());
+
+        List<Category> categories = categoryRepository.findByIdIn(categoryIds);
+        if (categories.size() != 0) {
+            updateServiceDto.getCategories()
+                    .forEach(
+                            categoryDto -> services.orElseThrow(EntityNotFoundException::new)
+                                    .updateServiceCategory(categories)
+                    );
+        }
+
+        // 서비스 이미지 수정
+        if (updateServiceDto.getServiceImages() != null) {
+            for (UpdateServiceImageDto serviceImage : updateServiceDto.getServiceImages()) {
+                serviceImage.setFileInfo(fileHandler.getFileInfo(serviceImage.getImageFile()));
+
+                services.orElseThrow(EntityNotFoundException::new)
+                        .updateServiceImage(serviceImage);
+            }
+        }
+    }
+
+    /**
+     * 판매자) 서비스 수정 시 관련 옵션, 카테고리, 이미지 삭제
+     * (리스트에서 삭제해도 변경감지가 안됨... 그래서 일부러 삭제해줌)
+     */
+    @Transactional
+    public void deleteServicesAdditionalResource(UpdateServiceDto updateServiceDto) throws FileNotFoundException {
+
+        Long serviceId = updateServiceDto.getServiceId();
+        // 옵션 삭제
+        List<Long> optionIds = updateServiceDto.getServiceOptions().stream()
+                .filter(i -> i.getServiceOptionId() != null)
+                .map(i -> i.getServiceOptionId()).collect(Collectors.toList());
+        serviceOptionRepository.deleteByServices_IdAndIdNotIn(serviceId, optionIds);
+
+        // 카테고리 삭제
+        serviceCategoryRepository.deleteByServices_Id(serviceId);
+
+        // 디비 이미지 삭제 전 삭제할 이미지파일정보 미리 불러오기
+        List<ServiceImage> images = serviceImageRepository.findByServices_Id(serviceId);
+        // 이미지 삭제
+        List<Long> imageIds = updateServiceDto.getServiceImages().stream()
+                .filter(o -> o.getServiceImageId() != null)
+                .map(o -> o.getServiceImageId()).collect(Collectors.toList());
+        serviceImageRepository.deleteByServices_IdAndIdNotIn(serviceId, imageIds);
+
+        // 저장된 이미지파일 삭제
+        for (ServiceImage image : images) {
+            boolean deleteRes = fileHandler.deleteFile(image.getFakeName() + image.getExtensionName());
+            if (!deleteRes) {
+                throw new FileNotFoundException("fail to delete image file");
+            }
+        }
+    }
+
+    /**
+     * 판매자) 서비스 삭제
+     */
+    public void deleteService(Long serviceId) throws FileNotFoundException {
+
+        // 저장된 이미지파일 삭제
+        List<ServiceImage> images = serviceImageRepository.findByServices_Id(serviceId);
+        for (ServiceImage image : images) {
+            boolean deleteRes = fileHandler.deleteFile(image.getFakeName() + image.getExtensionName());
+            if (!deleteRes) {
+                throw new FileNotFoundException("fail to delete image file");
+            }
+        }
+
+        // storeId 가져와서 일치하는 레코드 삭제해주기
+        servicesRepository.deleteById(serviceId);
     }
 
 }
