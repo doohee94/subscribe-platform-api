@@ -257,4 +257,22 @@ public class ServicesService {
         servicesRepository.deleteById(serviceId);
     }
 
+    public ListResponse getSearchServiceList(String serviceName, int pageNum, int size) {
+
+        // 페이징 정보
+        PageRequest pageRequest = PageRequest.of(pageNum, size);
+
+        Page<Services> result;
+        if (serviceName.trim().isEmpty()) {  // 그냥 리스트 조회한 경우
+            result = servicesRepository.findAllSearchList(pageRequest);
+        } else {    // 서비스이름으로 조회한 경우
+            result = servicesRepository.findSearchList(serviceName, pageRequest);
+        }
+
+        List<ResServiceListDto> list = result.stream()
+                .map(o -> new ResServiceListDto(o, globalProperties.getFileUploadPath()))
+                .collect(Collectors.toList());
+
+        return new ListResponse(list, result.getTotalElements());
+    }
 }

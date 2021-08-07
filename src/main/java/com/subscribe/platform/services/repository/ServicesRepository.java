@@ -22,6 +22,22 @@ public interface ServicesRepository extends JpaRepository<Services, Long> {
     @Query("SELECT s FROM Services s WHERE s.id = :serviceId")
     Optional<Services> findServiceDetail(@Param("serviceId") Long serviceId);
 
-    void deleteByIdAndStore_Id(Long id, Long storeId);
+    int deleteByIdAndStore_Id(Long id, Long storeId);
 
+    @Query("SELECT s " +
+            "FROM Services s JOIN FETCH ServiceImage si " +
+            "ON s.id = si.services.id " +
+            "WHERE si.imageType = 'THUMBNAIL' " +
+            "AND si.imageSeq=1 " +
+            "ORDER BY s.createdDate DESC")
+    Page<Services> findAllSearchList(Pageable pageable);
+
+    @Query("SELECT s " +
+            "FROM Services s JOIN FETCH ServiceImage si " +
+            "ON s.id = si.services.id " +
+            "WHERE s.name LIKE %:serviceName% " +
+            "AND si.imageType = 'THUMBNAIL' " +
+            "AND si.imageSeq=1 " +
+            "ORDER BY s.createdDate DESC")
+    Page<Services> findSearchList(@Param("serviceName") String serviceName, Pageable pageable);
 }

@@ -6,8 +6,6 @@ import com.subscribe.platform.services.service.ServicesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/service")
@@ -58,5 +56,11 @@ public class ServicesController {
         servicesService.deleteService(serviceId);
     }
 
-
+    /**
+     * 일반 서비스 리스트 조회
+     */
+    @GetMapping("/getSearchServiceList")
+    public ListResponse getSearchServiceList(@RequestParam(value = "serviceNum", defaultValue = "") String serviceName, @RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "size", defaultValue = "10") int size) throws Exception{
+        return servicesService.getSearchServiceList(serviceName, pageNum, size);
+    }
 }
