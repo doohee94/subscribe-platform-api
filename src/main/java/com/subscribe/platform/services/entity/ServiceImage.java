@@ -1,5 +1,6 @@
 package com.subscribe.platform.services.entity;
 
+import com.subscribe.platform.services.dto.UpdateServiceImageDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,11 +34,20 @@ public class ServiceImage {
     }
 
     @Builder
-    public ServiceImage(ImageType imageType, int imageSeq, String name, String fakeName, String extensionName) {
+    public ServiceImage(Long id, ImageType imageType, int imageSeq, String name, String fakeName, String extensionName) {
+        this.id = id;
         this.imageType = imageType;
         this.imageSeq = imageSeq;
         this.name = name;
         this.fakeName = fakeName;
         this.extensionName = extensionName;
+    }
+
+    public void updateServiceImage(UpdateServiceImageDto imageDto){
+        this.imageType = "THUMBNAIL".equals(imageDto.getImageType()) ? ImageType.THUMBNAIL : ImageType.DETAIL;
+        this.imageSeq = imageDto.getImageSeq();
+        this.name = imageDto.getFileInfo().getOriginName();
+        this.fakeName = imageDto.getFileInfo().getFakeName();
+        this.extensionName = imageDto.getFileInfo().getExtensionName();
     }
 }

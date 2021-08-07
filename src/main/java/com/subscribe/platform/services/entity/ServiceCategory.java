@@ -1,5 +1,6 @@
 package com.subscribe.platform.services.entity;
 
+import com.subscribe.platform.services.dto.UpdateServiceCategoryDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,4 +38,5 @@ public class ServiceCategory {
         serviceCategory.setServices(services);
         return serviceCategory;
     }
+
 }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-@Profile("local")
+//@Profile("local")
 @Getter
 public class GlobalProperties {
 
