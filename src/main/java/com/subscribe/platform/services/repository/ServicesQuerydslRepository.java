@@ -1,11 +1,16 @@
 package com.subscribe.platform.services.repository;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.subscribe.platform.services.dto.ResStoreServiceDto;
+import com.subscribe.platform.services.dto.QResServiceListDto;
+import com.subscribe.platform.services.dto.ResServiceListDto;
 import com.subscribe.platform.services.entity.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,4 +32,21 @@ public class ServicesQuerydslRepository {
                 .fetch();
     }
 
+
+    public Page<ResServiceListDto> findServicesByCategory(Long categoryId, Pageable pageable){
+        QueryResults<ResServiceListDto> results = queryFactory.select(new QResServiceListDto(services.id, services.name, serviceImage.fakeName.concat(serviceImage.extensionName)))
+                .from(services)
+                .leftJoin(services.serviceCategories, serviceCategory).on(serviceCategory.category.id.eq(categoryId))
+                .leftJoin(services.serviceImages, serviceImage)
+                .where(serviceImage.imageType.eq(ImageType.THUMBNAIL),
+                        serviceImage.imageSeq.eq(1))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<ResServiceListDto> content = results.getResults();
+        long total = results.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
+    }
 }

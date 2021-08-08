@@ -57,10 +57,26 @@ public class ServicesController {
     }
 
     /**
-     * 일반 서비스 리스트 조회
+     * 사용자) 서비스 리스트 조회
      */
     @GetMapping("/getSearchServiceList")
     public ListResponse getSearchServiceList(@RequestParam(value = "serviceNum", defaultValue = "") String serviceName, @RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "size", defaultValue = "10") int size) throws Exception{
         return servicesService.getSearchServiceList(serviceName, pageNum, size);
+    }
+
+    /**
+     * 사용자) 카테고리별 서비스 리스트 검색
+     */
+    @GetMapping("/getServiceListByCategory/{categoryId}")
+    public ListResponse getServiceListByCategory(@RequestParam(value = "categoryId") Long categoryId, @RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "size", defaultValue = "10") int size) throws Exception{
+        return servicesService.getServiceListByCategory(categoryId, pageNum, size);
+    }
+
+    /**
+     * 사용자) 신상서비스 조회 : 최근 3일내에 등록된 서비스 조회
+     */
+    @GetMapping("/getNewSErviceList")
+    public ListResponse getNewServiceList(@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "size", defaultValue = "10") int size)throws Exception{
+        return servicesService.getNewServiceList(pageNum, size);
     }
 }

@@ -12,6 +12,7 @@ import com.subscribe.platform.user.entity.User;
 import com.subscribe.platform.user.repository.StoreRepository;
 import com.subscribe.platform.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,9 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ServicesService {
@@ -39,6 +44,7 @@ public class ServicesService {
     private final ServiceOptionRepository serviceOptionRepository;
     private final ServiceImageRepository serviceImageRepository;
     private final ServiceCategoryRepository serviceCategoryRepository;
+    private final ServicesQuerydslRepository servicesQuerydslRepository;
 
     /**
      * 서비스 등록
@@ -257,6 +263,9 @@ public class ServicesService {
         servicesRepository.deleteById(serviceId);
     }
 
+    /**
+     * 사용자) 서비스 리스트 조회(그냥 검색, 서비스이름 검색)
+     */
     public ListResponse getSearchServiceList(String serviceName, int pageNum, int size) {
 
         // 페이징 정보
@@ -268,6 +277,39 @@ public class ServicesService {
         } else {    // 서비스이름으로 조회한 경우
             result = servicesRepository.findSearchList(serviceName, pageRequest);
         }
+
+        List<ResServiceListDto> list = result.stream()
+                .map(o -> new ResServiceListDto(o, globalProperties.getFileUploadPath()))
+                .collect(Collectors.toList());
+
+        return new ListResponse(list, result.getTotalElements());
+    }
+
+    /**
+     * 사용자) 카테고리별 서비스 리스트 검색
+     */
+    public ListResponse getServiceListByCategory(Long categoryId, int pageNum, int size){
+        PageRequest pageRequest = PageRequest.of(pageNum, size);    // 페이징 정보
+        Page<ResServiceListDto> result = servicesQuerydslRepository.findServicesByCategory(categoryId, pageRequest);
+
+        // 이미지 파일 경로 붙이기
+        result.forEach(
+                o -> o.setThumbnailImage(globalProperties.getFileUploadPath()+o.getThumbnailImage())
+        );
+        return new ListResponse(result.getContent(), result.getTotalElements());
+    }
+
+    /**
+     * 사용자) 신상서비스 조회 : 최근 3일내에 등록된 서비스 조회
+     */
+    public ListResponse getNewServiceList(int pageNum, int size){
+        PageRequest pageRequest = PageRequest.of(pageNum, size);
+
+        LocalDateTime toDate = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0));
+        LocalDateTime fromDate = toDate.minusDays(3);
+        Page<Services> result = servicesRepository.findByCreatedDateBetween(fromDate, toDate, pageRequest);
+
+        log.debug("nowDate = {}", toDate);
 
         List<ResServiceListDto> list = result.stream()
                 .map(o -> new ResServiceListDto(o, globalProperties.getFileUploadPath()))

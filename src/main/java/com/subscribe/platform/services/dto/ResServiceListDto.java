@@ -1,5 +1,6 @@
 package com.subscribe.platform.services.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.subscribe.platform.services.entity.ImageType;
 import com.subscribe.platform.services.entity.Services;
 import lombok.Data;
@@ -11,6 +12,13 @@ public class ResServiceListDto {
     private Long serviceId;
     private String serviceName;
     private String thumbnailImage;
+
+    @QueryProjection
+    public ResServiceListDto(Long serviceId, String serviceName, String thumbnailImage) {
+        this.serviceId = serviceId;
+        this.serviceName = serviceName;
+        this.thumbnailImage = thumbnailImage;
+    }
 
     public ResServiceListDto(Services services, String filePath) {
         this.serviceId =services.getId();
