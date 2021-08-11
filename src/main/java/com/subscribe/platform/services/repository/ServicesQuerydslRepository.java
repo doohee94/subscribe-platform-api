@@ -36,9 +36,10 @@ public class ServicesQuerydslRepository {
     public Page<ResServiceListDto> findServicesByCategory(Long categoryId, Pageable pageable){
         QueryResults<ResServiceListDto> results = queryFactory.select(new QResServiceListDto(services.id, services.name, serviceImage.fakeName.concat(serviceImage.extensionName)))
                 .from(services)
-                .leftJoin(services.serviceCategories, serviceCategory).on(serviceCategory.category.id.eq(categoryId))
-                .leftJoin(services.serviceImages, serviceImage)
-                .where(serviceImage.imageType.eq(ImageType.THUMBNAIL),
+                .join(services.serviceCategories, serviceCategory)
+                .join(services.serviceImages, serviceImage)
+                .where(serviceCategory.category.id.eq(categoryId),
+                        serviceImage.imageType.eq(ImageType.THUMBNAIL),
                         serviceImage.imageSeq.eq(1))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

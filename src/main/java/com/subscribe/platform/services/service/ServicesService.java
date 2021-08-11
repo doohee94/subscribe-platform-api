@@ -248,6 +248,7 @@ public class ServicesService {
     /**
      * 판매자) 서비스 삭제
      */
+    @Transactional
     public void deleteService(Long serviceId) throws FileNotFoundException {
 
         // 저장된 이미지파일 삭제
@@ -286,7 +287,7 @@ public class ServicesService {
     }
 
     /**
-     * 사용자) 카테고리별 서비스 리스트 검색
+     * 사용자) 카테고리별 서비스 리스트 조회
      */
     public ListResponse getServiceListByCategory(Long categoryId, int pageNum, int size){
         PageRequest pageRequest = PageRequest.of(pageNum, size);    // 페이징 정보
