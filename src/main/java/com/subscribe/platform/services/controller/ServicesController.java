@@ -67,6 +67,14 @@ public class ServicesController {
     }
 
     /**
+     * 카테고리 전체 조회
+     */
+    @GetMapping("/getCategories")
+    public ListResponse getCategories(){
+        return servicesService.getCategories();
+    }
+
+    /**
      * 사용자) 카테고리별 서비스 리스트 조회
      */
     @GetMapping("/getServiceListByCategory/{categoryId}")

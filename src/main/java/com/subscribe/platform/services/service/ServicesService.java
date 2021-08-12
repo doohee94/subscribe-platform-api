@@ -287,6 +287,21 @@ public class ServicesService {
     }
 
     /**
+     * 카테고리 조회
+     */
+    public ListResponse getCategories(){
+        List<Category> categories = categoryRepository.findAll();
+        List<ResCategoryDto> result = categories.stream()
+                .map(o -> ResCategoryDto.builder()
+                        .categoryId(o.getId())
+                        .categoryName(o.getName())
+                        .build()
+                ).collect(Collectors.toList());
+
+        return new ListResponse(result, result.size());
+    }
+
+    /**
      * 사용자) 카테고리별 서비스 리스트 조회
      */
     public ListResponse getServiceListByCategory(Long categoryId, int pageNum, int size){
