@@ -3,13 +3,14 @@ spring:
     database: mysql
     hibernate:
       ddl-auto: update
+      use-new-id-generator-mappings: false
+
     properties:
       hibernate:
         default_batch_fetch_size: 500
         format_sql: true
-#        show-sql: true
+        show-sql: true
         open-in-view: false
-
 
 jwt:
   token:
