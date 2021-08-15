@@ -15,13 +15,16 @@ truncate table user;
 set FOREIGN_KEY_CHECKS = 1;
 
 insert into user (user_id, created_date, last_modified_date, email, user_name, password, user_status)
-values (2, now(), now(), 'USER','USER','$2a$10$KPNx1xARxmpYCuRsqzHpPun20NJhDX','WAITING');
+values (2, now(), now(), 'USER','USER','$2a$10$ss0EtziPLj6QiVATRUmoKuJ.TwQ3z8jKq1XT9eorzxnAgXjdp5zma','WAITING');
 
 insert into user (user_id, created_date, last_modified_date, email, user_name, password, user_status)
-values (3, now(), now(), 'STORE','STORE','$2a$10$KPNx1xARxmpYCuRsqzHpPun20NJhDX','WAITING');
+values (3, now(), now(), 'STORE','STORE','$2a$10$ss0EtziPLj6QiVATRUmoKuJ.TwQ3z8jKq1XT9eorzxnAgXjdp5zma','WAITING');
 
 insert into user (user_id, created_date, last_modified_date, email, user_name, password, user_status)
-values (1, now(), now(), 'ADMIN','ADMIN','$2a$10$KPNx1xARxmpYCuRsqzHpPun20NJhDX','WAITING');
+values (1, now(), now(), 'string','string','$2a$10$ss0EtziPLj6QiVATRUmoKuJ.TwQ3z8jKq1XT9eorzxnAgXjdp5zma','WAITING');
+
+insert into user (user_id, created_date, last_modified_date, email, user_name, password, user_status)
+values (4, now(), now(), 'ADMIN','ADMIN','$2a$10$ss0EtziPLj6QiVATRUmoKuJ.TwQ3z8jKq1XT9eorzxnAgXjdp5zma','WAITING');
 
 insert into authority (id, created_date, last_modified_date, authority)
 values (1,now(),now(),'ADMIN');
@@ -31,8 +34,12 @@ insert into authority (id, created_date, last_modified_date, authority)
 values (3,now(),now(),'STORE');
 
 insert into user_authority (user_id, authority_id) values (1,1);
+insert into user_authority (user_id, authority_id) values (1,2);
+insert into user_authority (user_id, authority_id) values (1,3);
+
 insert into user_authority (user_id, authority_id) values (2,2);
 insert into user_authority (user_id, authority_id) values (3,3);
+insert into user_authority (user_id, authority_id) values (4,1);
 
 
 insert into customer (customer_id, created_date, last_modified_date, address1, address2, zip_code, phone_number,
@@ -41,7 +48,7 @@ values (1,now(),now(),'인천광역시','남동구','1234','010213123',2);
 
 
 insert into store (store_id, business_num, store_name, user_id)
-values (1, '12341234','견과류가게',3);
+values (1, '12341234','견과류가게',1);
 
 
 insert into category values(1,'식품');
