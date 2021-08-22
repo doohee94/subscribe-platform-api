@@ -1,9 +1,13 @@
 package com.subscribe.platform.services.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
+import com.subscribe.platform.common.properties.GlobalProperties;
 import com.subscribe.platform.services.entity.ImageType;
 import com.subscribe.platform.services.entity.Services;
 import lombok.Data;
 import lombok.ToString;
+
+import java.io.File;
 
 @Data
 public class ResServiceListDto {
@@ -11,6 +15,13 @@ public class ResServiceListDto {
     private Long serviceId;
     private String serviceName;
     private String thumbnailImage;
+
+    @QueryProjection
+    public ResServiceListDto(Long serviceId, String serviceName, String thumbnailImage) {
+        this.serviceId = serviceId;
+        this.serviceName = serviceName;
+        this.thumbnailImage = thumbnailImage;
+    }
 
     public ResServiceListDto(Services services, String filePath) {
         this.serviceId =services.getId();
@@ -22,7 +33,6 @@ public class ResServiceListDto {
 //                .map(t->t.getFakeName()+t.getExtensionName())
                 .map(t->t.getFakeName()+t.getExtensionName())
                 .findFirst()
-                .orElse(null)
-        ;
+                .orElse(null);
     }
 }

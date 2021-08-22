@@ -4,8 +4,10 @@ import com.subscribe.platform.common.model.ListResponse;
 import com.subscribe.platform.services.dto.*;
 import com.subscribe.platform.services.service.ServicesService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/service")
@@ -16,7 +18,7 @@ public class ServicesController {
      * 판매자 서비스 등록
      */
     @PostMapping("/store/addService")
-    public void createService(@ModelAttribute CreateServiceDto createServiceDto) throws Exception {   // @ModelAttribute - form으로 전송받을 때 사용
+    public void createService(@ModelAttribute CreateServiceDto createServiceDto) throws Exception {
         servicesService.createService(createServiceDto);
     }
 
@@ -57,10 +59,35 @@ public class ServicesController {
     }
 
     /**
-     * 일반 서비스 리스트 조회
+     * 사용자) 서비스 리스트 조회
      */
     @GetMapping("/getSearchServiceList")
-    public ListResponse getSearchServiceList(@RequestParam(value = "serviceNum", defaultValue = "") String serviceName, @RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "size", defaultValue = "10") int size) throws Exception{
+    public ListResponse getSearchServiceList(@RequestParam(value = "serviceName", defaultValue = "") String serviceName, @RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "size", defaultValue = "10") int size) throws Exception{
         return servicesService.getSearchServiceList(serviceName, pageNum, size);
+    }
+
+    /**
+     * 카테고리 전체 조회
+     */
+    @GetMapping("/getCategories")
+    public ListResponse getCategories(){
+        return servicesService.getCategories();
+    }
+
+    /**
+     * 사용자) 카테고리별 서비스 리스트 조회
+     */
+    @GetMapping("/getServiceListByCategory/{categoryId}")
+    public ListResponse getServiceListByCategory(@PathVariable(value = "categoryId") Long categoryId, @RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "size", defaultValue = "10") int size) throws Exception{
+        log.info("categoryId = {}", categoryId);
+        return servicesService.getServiceListByCategory(categoryId, pageNum, size);
+    }
+
+    /**
+     * 사용자) 신상서비스 조회 : 최근 3일내에 등록된 서비스 조회
+     */
+    @GetMapping("/getNewSErviceList")
+    public ListResponse getNewServiceList(@RequestParam(value = "pageNum", defaultValue = "0") int pageNum, @RequestParam(value = "size", defaultValue = "10") int size)throws Exception{
+        return servicesService.getNewServiceList(pageNum, size);
     }
 }

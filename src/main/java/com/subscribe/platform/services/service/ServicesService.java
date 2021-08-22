@@ -12,6 +12,7 @@ import com.subscribe.platform.user.entity.User;
 import com.subscribe.platform.user.repository.StoreRepository;
 import com.subscribe.platform.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,9 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ServicesService {
@@ -39,6 +44,7 @@ public class ServicesService {
     private final ServiceOptionRepository serviceOptionRepository;
     private final ServiceImageRepository serviceImageRepository;
     private final ServiceCategoryRepository serviceCategoryRepository;
+    private final ServicesQuerydslRepository servicesQuerydslRepository;
 
     /**
      * 서비스 등록
@@ -48,41 +54,48 @@ public class ServicesService {
 
         // 서비스 옵션 담기
         List<ServiceOption> serviceOptionList = new ArrayList<>();
-        for (CreateServiceOptionDto serviceOptionDto : dto.getServiceOptions()) {
-            ServiceOption option = ServiceOption.builder()
-                    .name(serviceOptionDto.getOptionName())
-                    .price(serviceOptionDto.getPrice())
-                    .stock(serviceOptionDto.getStock())
-                    .maxCount(serviceOptionDto.getMaxCount())
-                    .build();
-            serviceOptionList.add(option);
+        if(dto.getServiceOptions() != null){
+            for (CreateServiceOptionDto serviceOptionDto : dto.getServiceOptions()) {
+                ServiceOption option = ServiceOption.builder()
+                        .name(serviceOptionDto.getOptionName())
+                        .price(serviceOptionDto.getPrice())
+                        .stock(serviceOptionDto.getStock())
+                        .maxCount(serviceOptionDto.getMaxCount())
+                        .build();
+                serviceOptionList.add(option);
+            }
         }
 
         // 서비스 카테고리 담기
         List<Category> categoryList = new ArrayList<>();
-        for (CreateCategoryDto categoryDto : dto.getCategories()) {
-            Optional<Category> category = categoryRepository.findById(categoryDto.getCategoryId());
+        if(dto.getCategories() != null){
+            for (CreateCategoryDto categoryDto : dto.getCategories()) {
+                Optional<Category> category = categoryRepository.findById(categoryDto.getCategoryId());
 
-            Optional.of(category).ifPresent((value) -> {
-                categoryList.add(value.orElseThrow(EntityNotFoundException::new));
-            });
+                Optional.of(category).ifPresent((value) -> {
+                    categoryList.add(value.orElseThrow(EntityNotFoundException::new));
+                });
+            }
         }
 
         // 서비스 이미지 담기
         List<ServiceImage> serviceImageList = new ArrayList<>();
-        for (CreateServiceImageDto serviceImageDto : dto.getServiceImages()) {
+        if(dto.getServiceImages() != null){
+            for (CreateServiceImageDto serviceImageDto : dto.getServiceImages()) {
 
-            FileInfo fileInfo = fileHandler.getFileInfo(serviceImageDto.getImageFile());
+                FileInfo fileInfo = fileHandler.getFileInfo(serviceImageDto.getImageFile());
 
-            ServiceImage image = ServiceImage.builder()
-                    .name(fileInfo.getOriginName())
-                    .fakeName(fileInfo.getFakeName())
-                    .extensionName(fileInfo.getExtensionName())
-                    .imageType("THUMBNAIL".equals(serviceImageDto.getImageType()) ? ImageType.THUMBNAIL : ImageType.DETAIL)
-                    .imageSeq(serviceImageDto.getImageSeq())
-                    .build();
-            serviceImageList.add(image);
+                ServiceImage image = ServiceImage.builder()
+                        .name(fileInfo.getOriginName())
+                        .fakeName(fileInfo.getFakeName())
+                        .extensionName(fileInfo.getExtensionName())
+                        .imageType("THUMBNAIL".equals(serviceImageDto.getImageType()) ? ImageType.THUMBNAIL : ImageType.DETAIL)
+                        .imageSeq(serviceImageDto.getImageSeq())
+                        .build();
+                serviceImageList.add(image);
+            }
         }
+
 
         // 서비스 생성
         Services services = Services.builder()
@@ -242,6 +255,7 @@ public class ServicesService {
     /**
      * 판매자) 서비스 삭제
      */
+    @Transactional
     public void deleteService(Long serviceId) throws FileNotFoundException {
 
         // 저장된 이미지파일 삭제
@@ -257,6 +271,9 @@ public class ServicesService {
         servicesRepository.deleteById(serviceId);
     }
 
+    /**
+     * 사용자) 서비스 리스트 조회(그냥 검색, 서비스이름 검색)
+     */
     public ListResponse getSearchServiceList(String serviceName, int pageNum, int size) {
 
         // 페이징 정보
@@ -268,6 +285,54 @@ public class ServicesService {
         } else {    // 서비스이름으로 조회한 경우
             result = servicesRepository.findSearchList(serviceName, pageRequest);
         }
+
+        List<ResServiceListDto> list = result.stream()
+                .map(o -> new ResServiceListDto(o, globalProperties.getFileUploadPath()))
+                .collect(Collectors.toList());
+
+        return new ListResponse(list, result.getTotalElements());
+    }
+
+    /**
+     * 카테고리 조회
+     */
+    public ListResponse getCategories(){
+        List<Category> categories = categoryRepository.findAll();
+        List<ResCategoryDto> result = categories.stream()
+                .map(o -> ResCategoryDto.builder()
+                        .categoryId(o.getId())
+                        .categoryName(o.getName())
+                        .build()
+                ).collect(Collectors.toList());
+
+        return new ListResponse(result, result.size());
+    }
+
+    /**
+     * 사용자) 카테고리별 서비스 리스트 조회
+     */
+    public ListResponse getServiceListByCategory(Long categoryId, int pageNum, int size){
+        PageRequest pageRequest = PageRequest.of(pageNum, size);    // 페이징 정보
+        Page<ResServiceListDto> result = servicesQuerydslRepository.findServicesByCategory(categoryId, pageRequest);
+
+        // 이미지 파일 경로 붙이기
+        result.forEach(
+                o -> o.setThumbnailImage(globalProperties.getFileUploadPath()+o.getThumbnailImage())
+        );
+        return new ListResponse(result.getContent(), result.getTotalElements());
+    }
+
+    /**
+     * 사용자) 신상서비스 조회 : 최근 3일내에 등록된 서비스 조회
+     */
+    public ListResponse getNewServiceList(int pageNum, int size){
+        PageRequest pageRequest = PageRequest.of(pageNum, size);
+
+        LocalDateTime toDate = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0));
+        LocalDateTime fromDate = toDate.minusDays(3);
+        Page<Services> result = servicesRepository.findByCreatedDateBetween(fromDate, toDate, pageRequest);
+
+        log.debug("nowDate = {}", toDate);
 
         List<ResServiceListDto> list = result.stream()
                 .map(o -> new ResServiceListDto(o, globalProperties.getFileUploadPath()))
