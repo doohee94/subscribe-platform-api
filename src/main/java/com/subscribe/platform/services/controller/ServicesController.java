@@ -18,7 +18,7 @@ public class ServicesController {
      * 판매자 서비스 등록
      */
     @PostMapping("/store/addService")
-    public void createService(@ModelAttribute CreateServiceDto createServiceDto) throws Exception {   // @ModelAttribute - form으로 전송받을 때 사용
+    public void createService(@ModelAttribute CreateServiceDto createServiceDto) throws Exception {
         servicesService.createService(createServiceDto);
     }
 
