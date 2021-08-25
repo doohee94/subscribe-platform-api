@@ -16,7 +16,7 @@ public enum ErrorCode {
     //auth
     INVALID_TOKEN(401, "UNAUTHORIZED", "invalid token"),
     JWT_EXPIRED(401,"UNAUTHORIZED", "JWT Token expired"),
-    BAD_CREDENTIALS(401, "UNAUTHORIZED", "login fail");
+    LOGIN_FAIL(401, "UNAUTHORIZED", "login fail");
 
     ;
     private final String code;

@@ -51,12 +51,12 @@ insert into store (store_id, business_num, store_name, user_id)
 values (1, '12341234','견과류가게',1);
 
 
-insert into category values(1,'식품');
-insert into category values(2,'생활');
-insert into category values(3,'패션의류');
-insert into category values(4,'뷰티');
-insert into category values(5,'스포츠/레저');
-insert into category values(6,'패션잡화');
+insert into category values(1,'식품', now(), now());
+insert into category values(2,'생활', now(), now());
+insert into category values(3,'패션의류', now(), now());
+insert into category values(4,'뷰티', now(), now());
+insert into category values(5,'스포츠/레저', now(), now());
+insert into category values(6,'패션잡화', now(), now());
 
 
 insert into service (service_id, created_date, last_modified_date, available_day, detail_contents, service_name,
@@ -70,6 +70,9 @@ values (2, now(), now(), '1','안녕하세요','옷 1', 'MONTH',1);
 insert into service (service_id, created_date, last_modified_date, available_day, detail_contents, service_name,
                      service_cycle, store_id)
 values (3, now(), now(), '수','안녕하세요','견과류 3', 'WEEK',1);
+
+# insert into service_image(service_image_id, extension_name, fake_name, image_seq, image_type, image_name, service_id)
+# values (1, '.png', '9feafe5f-75cb-4c7a-a049-7166a4420183', 1, 'THUMBNAIL', 'test이미지', 1);
 
 
 insert into service_category (service_category_id, category_id, service_id)
