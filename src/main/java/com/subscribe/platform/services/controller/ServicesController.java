@@ -70,7 +70,7 @@ public class ServicesController {
      * 카테고리 전체 조회
      */
     @GetMapping("/getCategories")
-    public ListResponse getCategories(){
+    public ListResponse getCategories() throws Exception{
         return servicesService.getCategories();
     }
 
