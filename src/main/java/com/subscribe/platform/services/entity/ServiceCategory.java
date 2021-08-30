@@ -1,5 +1,6 @@
 package com.subscribe.platform.services.entity;
 
+import com.subscribe.platform.common.entity.BaseTimeEntity;
 import com.subscribe.platform.services.dto.UpdateServiceCategoryDto;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @Table(name = "service_category")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ServiceCategory {
+public class ServiceCategory extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "service_category_id")

@@ -1,5 +1,6 @@
 package com.subscribe.platform.services.entity;
 
+import com.subscribe.platform.common.entity.BaseTimeEntity;
 import com.subscribe.platform.services.dto.UpdateServiceDto;
 import com.subscribe.platform.services.dto.UpdateServiceOptionDto;
 import lombok.AccessLevel;
@@ -14,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "service_option")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ServiceOption {
+public class ServiceOption extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "service_option_id")
