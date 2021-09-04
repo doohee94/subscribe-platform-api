@@ -2,6 +2,7 @@ package com.subscribe.platform.services.entity;
 
 import com.subscribe.platform.common.entity.BaseTimeEntity;
 import com.subscribe.platform.services.dto.*;
+import com.subscribe.platform.subscribe.entity.SubscribeService;
 import com.subscribe.platform.user.entity.Customer;
 import com.subscribe.platform.user.entity.Store;
 import lombok.AccessLevel;
@@ -36,12 +37,6 @@ public class Services extends BaseTimeEntity {
 
     private String availableDay; // 판매자가 가능한 배송일, 요일 (쉼표로 구분)
 
-    // 이건 서비스테이블이 아니라 구독테이블에 들어가야할거같음
-//    @Enumerated(EnumType.STRING)
-//    private ServiceDay serviceDay;
-//
-//    private LocalDateTime serviceDate;
-
     @Lob
     private String detailContents;
 
@@ -61,6 +56,9 @@ public class Services extends BaseTimeEntity {
     // 서비스 이미지
     @OneToMany(mappedBy = "services", cascade = CascadeType.ALL)
     private Set<ServiceImage> serviceImages = new HashSet<>();
+
+    @OneToMany(mappedBy = "services", cascade = CascadeType.ALL)
+    private Set<SubscribeService> subscribeServices = new HashSet<>();
 
     // ===== 연관관계 메소드 모음 =====
     public void setStore(Store store) {

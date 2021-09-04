@@ -18,7 +18,6 @@ import java.util.List;
 import static com.subscribe.platform.services.entity.QCategory.category;
 import static com.subscribe.platform.services.entity.QServiceCategory.serviceCategory;
 import static com.subscribe.platform.services.entity.QServiceImage.serviceImage;
-import static com.subscribe.platform.services.entity.QServiceOption.*;
 import static com.subscribe.platform.services.entity.QServices.*;
 
 @RequiredArgsConstructor

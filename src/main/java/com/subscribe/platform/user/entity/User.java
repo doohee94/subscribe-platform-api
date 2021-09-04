@@ -2,6 +2,7 @@ package com.subscribe.platform.user.entity;
 
 import com.subscribe.platform.common.entity.BaseTimeEntity;
 import com.subscribe.platform.user.dto.CustomerUpdateDto;
+import com.subscribe.platform.user.dto.UpdatePasswordDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -99,5 +100,9 @@ public class User extends BaseTimeEntity {
 
         this.customer.update(customerUpdateDto);
 
+    }
+
+    public void setPassword(String currPassword){
+        this.password = new Password(currPassword);
     }
 }

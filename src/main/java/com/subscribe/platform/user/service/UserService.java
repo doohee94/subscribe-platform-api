@@ -1,5 +1,6 @@
 package com.subscribe.platform.user.service;
 
+import com.subscribe.platform.user.dto.UpdatePasswordDto;
 import com.subscribe.platform.user.dto.UpdateStoreDto;
 import com.subscribe.platform.user.dto.UserDto;
 import com.subscribe.platform.user.entity.Authority;
@@ -8,8 +9,10 @@ import com.subscribe.platform.user.entity.User;
 import com.subscribe.platform.user.repository.AuthorityRepository;
 import com.subscribe.platform.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +33,7 @@ public class UserService {
 
     public void createUser(UserDto.CreateUserDto createUserDto) {
 
-        String authName = createUserDto.isStore() ? "STORE" : "MEMBER";
+        String authName = createUserDto.isStore() ? "STORE" : "USER";
         Authority authority = authorityRepository.findByAuthority(authName);
 
         User user = User.createMemberBuilder()
@@ -78,5 +81,27 @@ public class UserService {
                 .stream()
                 .map(o -> o.getAuthority())
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public boolean updatePassword(UpdatePasswordDto passwordDto){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email);
+
+        // 현재 비밀번호인지 확인
+        boolean isTrue = isCurrPassword(passwordDto.getCurrPassword(), user.getPassword().getPassword());
+        if(isTrue){
+            user.setPassword(passwordEncoder.encode(passwordDto.getChangePassword()));
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 입력한 비밀번호가 현재비밀번호인지 확인하는 함수
+     */
+    private boolean isCurrPassword(String currPassword, String findPassword) {
+        return passwordEncoder.matches(currPassword, findPassword); // matches(인코딩안된 문자, 인코딩 된 문자)
     }
 }
