@@ -1,5 +1,6 @@
 package com.subscribe.platform.services.entity;
 
+import com.subscribe.platform.common.entity.BaseTimeEntity;
 import com.subscribe.platform.services.dto.UpdateServiceImageDto;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @Table(name = "service_image")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ServiceImage {
+public class ServiceImage extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "service_image_id")

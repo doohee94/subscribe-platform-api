@@ -12,7 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -68,5 +70,13 @@ public class UserService {
         store.updateStore(request.getStoreName(), request.getBusinessNum());
         //user.setStore(store);
         userRepository.save(user);
+    }
+
+    public List<String> getAuthoritiesByEmail(String email){
+        User user = userRepository.findByEmail(email);
+        return user.getAuthorities()
+                .stream()
+                .map(o -> o.getAuthority())
+                .collect(Collectors.toList());
     }
 }
