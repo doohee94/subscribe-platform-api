@@ -2,8 +2,10 @@ package com.subscribe.platform.services.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class CreateServiceOptionDto {
     private String optionName;
     private int price;
@@ -17,4 +19,5 @@ public class CreateServiceOptionDto {
         this.stock = stock;
         this.maxCount = maxCount;
     }
+
 }
