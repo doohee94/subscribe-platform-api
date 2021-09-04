@@ -59,6 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/user/store/**").hasAuthority("STORE")
                 .antMatchers("/api/service/store/**").hasAuthority("STORE")
+                .antMatchers("/api/user/customer/**").hasAuthority("USER")
+                .antMatchers("/api/user/password").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .exceptionHandling()

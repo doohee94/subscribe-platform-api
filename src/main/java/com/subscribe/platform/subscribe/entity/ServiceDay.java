@@ -1,4 +1,4 @@
-package com.subscribe.platform.services.entity;
+package com.subscribe.platform.subscribe.entity;
 
 import lombok.Getter;
 

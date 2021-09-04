@@ -1,5 +1,6 @@
 package com.subscribe.platform.user.controller;
 
+import com.subscribe.platform.user.dto.UpdatePasswordDto;
 import com.subscribe.platform.user.dto.UpdateStoreDto;
 import com.subscribe.platform.user.dto.ResUserDto;
 import com.subscribe.platform.user.dto.UserDto;
@@ -57,16 +58,24 @@ public class UserController {
                 .build();
     }
 
-    // restApi 사용에서 store(엔티티)정보를 모두 가지고 있으면 put을 쓰고 엔티티의 일부만 수정한다 하면 fetch를 쓴다
+    // restApi 사용에서 store(엔티티)정보를 모두 가지고 있으면 put을 쓰고 엔티티의 일부만 수정한다 하면 patch를 쓴다
 
     /**
      * 판매자 정보 수정
      * @param request
      */
-    // put fetch 등은 @RequestBody로 해서 body를 받아야한다.
+    // put patch 등은 @RequestBody로 해서 body를 받아야한다.
     @PutMapping("/store/updateStoreinfo")
     public void updateStoreinfo(@Valid @RequestBody UpdateStoreDto request){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();    // 나중에 변경 예정
         userService.updateStore(email, request);
+    }
+
+    /**
+     * 비밀번호 변경
+     */
+    @PostMapping("/password")
+    public boolean updatePassword(@RequestBody UpdatePasswordDto passwordDto){
+        return userService.updatePassword(passwordDto);
     }
 }
