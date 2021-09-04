@@ -1,3 +1,7 @@
+server:
+  servlet:
+    contextPath: /api
+
 spring:
   jpa:
     database: mysql
@@ -11,6 +15,11 @@ spring:
 #        format_sql: true
 #        show-sql: true
         open-in-view: false
+
+  servlet:
+    multipart:
+      max-file-size: 150MB
+      max-request-size: 150MB
 
 jwt:
   token:

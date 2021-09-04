@@ -274,10 +274,10 @@ public class ServicesService {
     /**
      * 사용자) 서비스 리스트 조회(그냥 검색, 서비스이름 검색)
      */
-    public ListResponse getSearchServiceList(String serviceName, int pageNum, int size) {
+    public List<ResServiceListDto> getSearchServiceList(String serviceName, PageRequest pageRequest) {
 
-        // 페이징 정보
-        PageRequest pageRequest = PageRequest.of(pageNum, size);
+//        // 페이징 정보
+//        PageRequest pageRequest = PageRequest.of(pageNum, size);
 
         Page<Services> result;
         if (serviceName.trim().isEmpty()) {  // 그냥 리스트 조회한 경우
@@ -286,33 +286,28 @@ public class ServicesService {
             result = servicesRepository.findSearchList(serviceName, pageRequest);
         }
 
-        List<ResServiceListDto> list = result.stream()
+        return result.stream()
                 .map(o -> new ResServiceListDto(o, globalProperties.getFileUploadPath()))
                 .collect(Collectors.toList());
-
-        return new ListResponse(list, result.getTotalElements());
     }
 
     /**
      * 카테고리 조회
      */
-    public ListResponse getCategories(){
+    public List<ResCategoryDto> getCategories(){
         List<Category> categories = categoryRepository.findAll();
-        List<ResCategoryDto> result = categories.stream()
+        return categories.stream()
                 .map(o -> ResCategoryDto.builder()
                         .categoryId(o.getId())
                         .categoryName(o.getName())
                         .build()
                 ).collect(Collectors.toList());
-
-        return new ListResponse(result, result.size());
     }
 
     /**
      * 사용자) 카테고리별 서비스 리스트 조회
      */
-    public ListResponse getServiceListByCategory(Long categoryId, int pageNum, int size){
-        PageRequest pageRequest = PageRequest.of(pageNum, size);    // 페이징 정보
+    public ListResponse getServiceListByCategory(Long categoryId, PageRequest pageRequest){
         Page<ResServiceListDto> result = servicesQuerydslRepository.findServicesByCategory(categoryId, pageRequest);
 
         // 이미지 파일 경로 붙이기
@@ -325,8 +320,7 @@ public class ServicesService {
     /**
      * 사용자) 신상서비스 조회 : 최근 3일내에 등록된 서비스 조회
      */
-    public ListResponse getNewServiceList(int pageNum, int size){
-        PageRequest pageRequest = PageRequest.of(pageNum, size);
+    public ListResponse getNewServiceList( PageRequest pageRequest){
 
         LocalDateTime toDate = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0));
         LocalDateTime fromDate = toDate.minusDays(3);
@@ -340,4 +334,5 @@ public class ServicesService {
 
         return new ListResponse(list, result.getTotalElements());
     }
+
 }
