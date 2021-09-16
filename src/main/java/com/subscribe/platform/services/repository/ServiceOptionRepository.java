@@ -11,4 +11,6 @@ public interface ServiceOptionRepository extends JpaRepository<ServiceOption, Lo
 
     @Transactional
     void deleteByServices_IdAndIdNotIn(@Param("servicesId") Long servicesId, @Param("optionIds") List<Long> optionIds);
+
+    List<ServiceOption> findByIdIn(@Param("options") Long[] options);
 }

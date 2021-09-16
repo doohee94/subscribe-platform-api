@@ -32,8 +32,10 @@ public class ServicesController {
     @GetMapping("/categories/{categoryId}/services")
     @ApiOperation(value = "사용자 카테고리별 서비스 리스트 조회")
     public ListResponse getServiceListByCategory(@PathVariable(value = "categoryId") Long categoryId, PageableDto pageableDto) throws Exception {
-        log.info("categoryId = {}", categoryId);
-        return servicesService.getServiceListByCategory(categoryId,pageableDto.toPageRequest());
+
+//        new PageableDto(pageableDto.getPage(), pageableDto.getSize(), pageableDto.getSort());
+
+        return servicesService.getServiceListByCategory(categoryId, pageableDto.toPageRequest());
     }
 
     @GetMapping("/services/new")

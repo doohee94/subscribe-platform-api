@@ -2,8 +2,7 @@ package com.subscribe.platform.services.entity;
 
 import com.subscribe.platform.common.entity.BaseTimeEntity;
 import com.subscribe.platform.services.dto.*;
-import com.subscribe.platform.subscribe.entity.SubscribeService;
-import com.subscribe.platform.user.entity.Customer;
+import com.subscribe.platform.subscribe.entity.Subscribe;
 import com.subscribe.platform.user.entity.Store;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,12 +10,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "service")
@@ -57,8 +53,8 @@ public class Services extends BaseTimeEntity {
     @OneToMany(mappedBy = "services", cascade = CascadeType.ALL)
     private Set<ServiceImage> serviceImages = new HashSet<>();
 
-    @OneToMany(mappedBy = "services", cascade = CascadeType.ALL)
-    private Set<SubscribeService> subscribeServices = new HashSet<>();
+    @OneToOne(mappedBy = "services")
+    private Subscribe subscribe;
 
     // ===== 연관관계 메소드 모음 =====
     public void setStore(Store store) {
