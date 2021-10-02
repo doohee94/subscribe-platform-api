@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 @Data
 public class ResShoppingDto {
+    private Long subscribeId;
     private String serviceName;
     private String serviceImage;
     private List<ResSubsOptionDto> options;
@@ -18,6 +19,7 @@ public class ResShoppingDto {
 
     @Builder
     public ResShoppingDto(String serviceName, String serviceImage, List<ServiceOption> serviceOptions, Subscribe subscribe){
+        this.subscribeId = subscribe.getId();
         this.serviceName = serviceName;
         this.serviceImage = serviceImage;
         this.options = serviceOptions.stream().map(

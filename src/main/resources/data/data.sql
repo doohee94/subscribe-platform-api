@@ -13,6 +13,10 @@ truncate table authority;
 truncate table user;
 truncate table subscribe;
 truncate table picked_option;
+truncate table payment_result;
+truncate table pay_info;
+truncate table comm_code;
+truncate table group_code;
 
 set FOREIGN_KEY_CHECKS = 1;
 
@@ -45,7 +49,7 @@ insert into user_authority (user_id, authority_id) values (1,3);
 insert into user_authority (user_id, authority_id) values (2,2);
 insert into user_authority (user_id, authority_id) values (3,3);
 insert into user_authority (user_id, authority_id) values (4,1);
-insert into user_authority (user_id, authority_id) values (5,1);
+insert into user_authority (user_id, authority_id) values (5,2);
 
 
 insert into customer (customer_id, created_date, last_modified_date, address1, address2, zip_code, phone_number,user_id)
@@ -102,6 +106,8 @@ insert into service_option (service_option_id, max_count, option_name, price, st
 values (3,1,'피스타치오', 1500, 30, 1, now(), now());
 insert into service_option (service_option_id, max_count, option_name, price, stock, service_id, created_date, last_modified_date)
 values (4,1,'캐슈넛', 800, 30, 1, now(), now());
+insert into service_option (service_option_id, max_count, option_name, price, stock, service_id, created_date, last_modified_date)
+values (5,1,'니트', 20000, 30, 2, now(), now());
 
 insert into store_services_list (store_store_id, services_list_service_id)
 values (1,1);
@@ -110,12 +116,12 @@ values (1,2);
 insert into store_services_list (store_store_id, services_list_service_id)
 values (1,3);
 
-insert into subscribe(subscribe_id, status, cancel_date, cancel_reason, pay_scheduled_price, pay_scheduled_date, customer_id, service_id, created_date, last_modified_date)
-values (1, 'SUBSCRIBE', null, null, 23000, now(), 1,1, now()-interval 2 day, now()-interval 2 day);
-insert into subscribe(subscribe_id, status, cancel_date, cancel_reason, pay_scheduled_price, pay_scheduled_date, customer_id, service_id, created_date, last_modified_date)
-values (2, 'SUBSCRIBE', null, null, 19000, now(), 1,3, now(), now());
-insert into subscribe(subscribe_id, status, cancel_date, cancel_reason, pay_scheduled_price, pay_scheduled_date, customer_id, service_id, created_date, last_modified_date)
-values (3, 'SHOPPING', null, null, 0, now(), 1,2, now(), now());
+insert into subscribe(subscribe_id, status, cancel_date, cancel_reason, pay_scheduled_price, pay_scheduled_date, customer_id, service_id, created_date, last_modified_date, subscribe_start_date, shopping_date)
+values (1, 'SUBSCRIBE', null, null, 23000, now(), 1,1, now()-interval 2 day, now()-interval 2 day, now()-interval 2 day, now()-interval 2 day );
+insert into subscribe(subscribe_id, status, cancel_date, cancel_reason, pay_scheduled_price, pay_scheduled_date, customer_id, service_id, created_date, last_modified_date, subscribe_start_date, shopping_date)
+values (2, 'SUBSCRIBE', null, null, 19000, now(), 1,3, now(), now(), now(), now());
+insert into subscribe(subscribe_id, status, cancel_date, cancel_reason, pay_scheduled_price, pay_scheduled_date, customer_id, service_id, created_date, last_modified_date, subscribe_start_date, shopping_date)
+values (3, 'SHOPPING', null, null, 0, now(), 1,2, now(), now(), now(), now());
 
 insert into  picked_option(picked_option_id, option_id, quantity, subscribe_id, created_date, last_modified_date)
 values (1, 1, 2, 1, now(), now());
@@ -125,3 +131,17 @@ insert into  picked_option(picked_option_id, option_id, quantity, subscribe_id, 
 values (3, 3, 1, 2, now(), now());
 insert into  picked_option(picked_option_id, option_id, quantity, subscribe_id, created_date, last_modified_date)
 values (4, 4, 2, 2, now(), now());
+insert into  picked_option(picked_option_id, option_id, quantity, subscribe_id, created_date, last_modified_date)
+values (5, 5, 2, 3, now(), now());
+
+insert into group_code(group_code_id, description, group_name)
+values(1, '구독취소사유그룹', '구독취소사유');
+
+insert into comm_code(comm_code_id, created_date, last_modified_date, code_name, description, group_code_id)
+values(1, now(), now(), '단순변심','구독취소사유-단순변심', 1);
+insert into comm_code(comm_code_id, created_date, last_modified_date, code_name, description, group_code_id)
+values(2, now(), now(), '가격상승','구독취소사유-가격상승', 1);
+insert into comm_code(comm_code_id, created_date, last_modified_date, code_name, description, group_code_id)
+values(3, now(), now(), '제품불만족','구독취소사유-제품불만족', 1);
+insert into comm_code(comm_code_id, created_date, last_modified_date, code_name, description, group_code_id)
+values(4, now(), now(), '기타','구독취소사유-기타', 1);

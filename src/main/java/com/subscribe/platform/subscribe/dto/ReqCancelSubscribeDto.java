@@ -5,5 +5,6 @@ import lombok.Data;
 @Data
 public class ReqCancelSubscribeDto {
     private Long subscribeId;
-    private String cancelReason;
+    private Long cancelReasonId;
+    private String cancelReasonEtc;
 }

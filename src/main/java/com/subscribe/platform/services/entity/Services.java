@@ -53,8 +53,8 @@ public class Services extends BaseTimeEntity {
     @OneToMany(mappedBy = "services", cascade = CascadeType.ALL)
     private Set<ServiceImage> serviceImages = new HashSet<>();
 
-    @OneToOne(mappedBy = "services")
-    private Subscribe subscribe;
+    @OneToMany(mappedBy = "services")
+    private Set<Subscribe> subscribes;
 
     // ===== 연관관계 메소드 모음 =====
     public void setStore(Store store) {

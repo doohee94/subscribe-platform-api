@@ -15,5 +15,7 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
     Optional<Subscribe> findByIdAndStatus(@Param("subscribeId") Long subscribeId, @Param("status") Status status);
 
     // 구독중인 서비스인지 확인 위해
-    Optional<Subscribe> findByCustomerIdAndServiceAndIdAndStatus(@Param("customerId") Long customerId, @Param("serviceId") Long serviceId, @Param("status") Status status);
+//    Optional<Subscribe> findByCustomerIdAndServiceAndIdAndStatus(@Param("customerId") Long customerId, @Param("serviceId") Long serviceId, @Param("status") Status status);
+
+    Optional<Subscribe> findByIdAndStatusAndCustomerId(@Param("subscribeId") Long subscribeId, @Param("status") Status status, @Param("customerId") Long customerId);
 }

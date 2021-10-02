@@ -31,7 +31,8 @@ public class Subscribe extends BaseTimeEntity {
     private String deliveryDay; // 배송일 : 요일 or 날짜
 
     private LocalDateTime cancelDate;
-    private String cancelReason;
+    private Long cancelReasonId;  // 구독취소사유코드
+    private String cancelReasonEtc; // 취소사유 기타
 
     private int payScheduledPrice;  // 결제예정금액
     private LocalDateTime payScheduledDate; // 결제예정일
@@ -46,23 +47,32 @@ public class Subscribe extends BaseTimeEntity {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pay_info_id")
+    private PayInfo payInfo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="service_id")
     private Services services;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "payment_id")
-    private Payment payment;
 
     // ============== 편의 메소드 ==============
-    public void cancelSubscribe(String cancelReason){
+    public void cancelSubscribe(Long cancelReasonId, String cancelReasonEtc){
         this.status = Status.CANCEL;
         this.cancelDate = LocalDateTime.now();
-        this.cancelReason = cancelReason;
+        this.cancelReasonId = cancelReasonId;
+        this.cancelReasonEtc = cancelReasonEtc;
     }
 
     public void startSubscribe(){
         this.status = Status.SUBSCRIBE;
         this.subscribeStartDate = LocalDateTime.now();
     }
+
+    public void setPayInfo(PayInfo payInfo){
+        this.payInfo = payInfo;
+    }
+
+
+
 }
