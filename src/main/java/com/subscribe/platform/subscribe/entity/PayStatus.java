@@ -1,7 +1,6 @@
 package com.subscribe.platform.subscribe.entity;
 
-public enum Status {
-    SHOPPING,
-    SUBSCRIBE,
+public enum PayStatus {
+    PAID,
     CANCEL
 }

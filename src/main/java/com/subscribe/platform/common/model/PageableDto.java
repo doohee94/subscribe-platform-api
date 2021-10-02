@@ -13,14 +13,18 @@ public class PageableDto {
     private Integer page;
     private Sort.Direction sort;
 
-    public PageableDto(Integer size, Integer page, Sort.Direction sort) {
+//    public PageableDto(Integer size, Integer page, Sort.Direction sort) {
+//
+//        this.size = size == null ? 10 : size;
+//        this.page = page == null ? 0 : page;
+//        this.sort = sort;
+//    }
+
+    public PageRequest toPageRequest() {
 
         this.size = size == null ? 10 : size;
         this.page = page == null ? 0 : page;
-        this.sort = sort;
-    }
 
-    public PageRequest toPageRequest() {
         if (sort == null) {
             return PageRequest.of(this.page, this.size);
         }

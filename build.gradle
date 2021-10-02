@@ -34,8 +34,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.7'
 
     //querydsl 추가
-    implementation 'com.querydsl:querydsl-jpa:5.0.0'
-    implementation 'com.querydsl:querydsl-apt:5.0.0'
+    implementation 'com.querydsl:querydsl-jpa'
+    implementation 'com.querydsl:querydsl-apt'
 
     //sql 파라미터 출력 관련
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.8'
