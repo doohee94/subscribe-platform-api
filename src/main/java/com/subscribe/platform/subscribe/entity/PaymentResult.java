@@ -15,8 +15,6 @@ import java.time.LocalDateTime;
 @Getter
 public class PaymentResult extends BaseTimeEntity {
 
-    // 등록일이 결제일
-
     @Id @Column(name = "payment_result_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,13 +25,15 @@ public class PaymentResult extends BaseTimeEntity {
     private String creditCardCompany;
     private String paidCardNo;
     private int payPrice;
+    private String subscribes;
 
     @Builder
-    public PaymentResult(PayStatus status, Long ownerId, String creditCardCompany, String paidCardNo, int payPrice) {
+    public PaymentResult(PayStatus status, Long ownerId, String creditCardCompany, String paidCardNo, int payPrice, String subscribes) {
         this.status = status;
         this.ownerId = ownerId;
         this.creditCardCompany = creditCardCompany;
         this.paidCardNo = paidCardNo;
         this.payPrice = payPrice;
+        this.subscribes = subscribes;
     }
 }

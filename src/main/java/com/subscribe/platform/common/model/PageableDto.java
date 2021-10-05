@@ -27,6 +27,8 @@ public class PageableDto {
 
         if (sort == null) {
             return PageRequest.of(this.page, this.size);
+        }else{
+            this.sort = sort == null ? Sort.DEFAULT_DIRECTION : sort;
         }
         return PageRequest.of(this.page, this.size, this.sort);
     }
