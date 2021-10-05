@@ -4,10 +4,7 @@ import com.subscribe.platform.common.model.ListResponse;
 import com.subscribe.platform.services.entity.ImageType;
 import com.subscribe.platform.services.entity.ServiceOption;
 import com.subscribe.platform.services.repository.ServiceOptionRepository;
-import com.subscribe.platform.subscribe.dto.ReqCancelSubscribeDto;
-import com.subscribe.platform.subscribe.dto.ReqPayInfoDto;
-import com.subscribe.platform.subscribe.dto.ResShoppingDto;
-import com.subscribe.platform.subscribe.dto.ResSubscribeListDto;
+import com.subscribe.platform.subscribe.dto.*;
 import com.subscribe.platform.subscribe.entity.*;
 import com.subscribe.platform.subscribe.repository.PaymentResultRepository;
 import com.subscribe.platform.subscribe.repository.SubscribeRepository;
@@ -130,6 +127,7 @@ public class SubscribeService {
         Customer customer = userRepository.findByEmail(email).getCustomer();
 
         int totalPrice =0;
+        String subscribes = "";
         // 장바구니정보 확인
         for (Long subscribeId : payInfoDto.getSubscribeIds()) {
             Subscribe subscribe = subscribeRepository.findByIdAndStatusAndCustomerId(subscribeId, Status.SHOPPING, customer.getId()).orElseThrow(EntityNotFoundException::new);
@@ -165,6 +163,8 @@ public class SubscribeService {
 
                 customer.addPayInfo(newPayInfo);
             }
+
+            subscribes += subscribe.getId()+",";
         }
 
         // 4. 결제 결과 저장
@@ -174,8 +174,8 @@ public class SubscribeService {
                 .creditCardCompany(payInfoDto.getCreditCardCompany())
                 .paidCardNo(payInfoDto.getCardNo())
                 .payPrice(totalPrice)
+                .subscribes(subscribes.substring(0,subscribes.length()-1))
                 .build();
         paymentResultRepository.save(paymentResult);
     }
-
 }
