@@ -43,4 +43,12 @@ public class ServicesController {
     public ListResponse getNewServiceList(@RequestParam(value = "pageNum", defaultValue = "0") int pageNum,PageableDto pageableDto) throws Exception {
         return servicesService.getNewServiceList(pageableDto.toPageRequest());
     }
+
+
+    @GetMapping("/services/{id}")
+    @ApiOperation(value = "서비스 상세 조회")
+    public ResServiceDetailDto getServiceById(@PathVariable Long id){
+        return servicesService.getServiceById(id);
+    }
+
 }

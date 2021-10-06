@@ -116,12 +116,12 @@ values (1,2);
 insert into store_services_list (store_store_id, services_list_service_id)
 values (1,3);
 
-insert into subscribe(subscribe_id, status, cancel_date, cancel_reason, pay_scheduled_price, pay_scheduled_date, customer_id, service_id, created_date, last_modified_date, subscribe_start_date, shopping_date)
-values (1, 'SUBSCRIBE', null, null, 23000, now(), 1,1, now()-interval 2 day, now()-interval 2 day, now()-interval 2 day, now()-interval 2 day );
-insert into subscribe(subscribe_id, status, cancel_date, cancel_reason, pay_scheduled_price, pay_scheduled_date, customer_id, service_id, created_date, last_modified_date, subscribe_start_date, shopping_date)
-values (2, 'SUBSCRIBE', null, null, 19000, now(), 1,3, now(), now(), now(), now());
-insert into subscribe(subscribe_id, status, cancel_date, cancel_reason, pay_scheduled_price, pay_scheduled_date, customer_id, service_id, created_date, last_modified_date, subscribe_start_date, shopping_date)
-values (3, 'SHOPPING', null, null, 0, now(), 1,2, now(), now(), now(), now());
+insert into subscribe(subscribe_id, status, cancel_date,  pay_scheduled_price, pay_scheduled_date, customer_id, service_id, created_date, last_modified_date, subscribe_start_date, shopping_date)
+values (1, 'SUBSCRIBE', null,  23000, now(), 1,1, now()-interval 2 day, now()-interval 2 day, now()-interval 2 day, now()-interval 2 day );
+insert into subscribe(subscribe_id, status, cancel_date, pay_scheduled_price, pay_scheduled_date, customer_id, service_id, created_date, last_modified_date, subscribe_start_date, shopping_date)
+values (2, 'SUBSCRIBE', null, 19000, now(), 1,3, now(), now(), now(), now());
+insert into subscribe(subscribe_id, status, cancel_date, pay_scheduled_price, pay_scheduled_date, customer_id, service_id, created_date, last_modified_date, subscribe_start_date, shopping_date)
+values (3, 'SHOPPING', null, 0, now(), 1,2, now(), now(), now(), now());
 
 insert into  picked_option(picked_option_id, option_id, quantity, subscribe_id, created_date, last_modified_date)
 values (1, 1, 2, 1, now(), now());
