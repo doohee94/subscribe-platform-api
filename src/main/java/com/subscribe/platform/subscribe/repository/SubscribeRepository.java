@@ -18,4 +18,6 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
 //    Optional<Subscribe> findByCustomerIdAndServiceAndIdAndStatus(@Param("customerId") Long customerId, @Param("serviceId") Long serviceId, @Param("status") Status status);
 
     Optional<Subscribe> findByIdAndStatusAndCustomerId(@Param("subscribeId") Long subscribeId, @Param("status") Status status, @Param("customerId") Long customerId);
+
+    List<Subscribe> findByIdIn(@Param("subscribeIds") List<Long> subscribeIds);
 }

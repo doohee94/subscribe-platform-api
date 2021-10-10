@@ -39,7 +39,7 @@ public class SubscribeController {
 
     @PostMapping("/subscribe")
     @ApiOperation(value = "구독하기")
-    public void subscribe(@ModelAttribute("reqPayInfoDto") ReqPayInfoDto reqPayInfoDto) throws Exception{
+    public void subscribe(@RequestBody ReqPayInfoDto reqPayInfoDto) throws Exception{
         subscribeService.subscribe(reqPayInfoDto);
     }
 }

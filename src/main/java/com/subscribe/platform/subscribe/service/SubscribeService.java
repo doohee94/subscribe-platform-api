@@ -75,9 +75,14 @@ public class SubscribeService {
      */
     @Transactional
     public void cancelSubscribe(ReqCancelSubscribeDto cancelDto) throws Exception {
-        Optional<Subscribe> subscribe = subscribeRepository.findByIdAndStatus(cancelDto.getSubscribeId(), Status.SUBSCRIBE);
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email);
+
+        Subscribe subscribe = subscribeRepository.findByIdAndStatus(cancelDto.getSubscribeId(), Status.SUBSCRIBE).orElseThrow(EntityNotFoundException::new);
         // 취소
-        subscribe.orElseThrow(EntityNotFoundException::new).cancelSubscribe(cancelDto.getCancelReasonId(), cancelDto.getCancelReasonEtc());
+        subscribe.cancelSubscribe(cancelDto.getCancelReasonId(), cancelDto.getCancelReasonEtc());
+
     }
 
     /**

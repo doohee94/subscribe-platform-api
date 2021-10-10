@@ -20,12 +20,12 @@ public class PaymentResult extends BaseTimeEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private PayStatus status;
-    private Long ownerId;
-    private String creditCardCompany;
-    private String paidCardNo;
-    private int payPrice;
-    private String subscribes;
+    private PayStatus status;   // 결제상태 결제 or 취소
+    private Long ownerId;   // 결제자 id(customerId
+    private String creditCardCompany;   // 카드사
+    private String paidCardNo;  // 카드번호
+    private int payPrice;   // 결제금액
+    private String subscribes;  // 결제된 구독 아이디들(,로 구분)
 
     @Builder
     public PaymentResult(PayStatus status, Long ownerId, String creditCardCompany, String paidCardNo, int payPrice, String subscribes) {
