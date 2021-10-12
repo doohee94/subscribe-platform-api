@@ -1,15 +1,14 @@
 package com.subscribe.platform.subscribe.controller;
 
 import com.subscribe.platform.common.model.ListResponse;
-import com.subscribe.platform.subscribe.dto.ReqCancelSubscribeDto;
-import com.subscribe.platform.subscribe.dto.ReqPayInfoDto;
-import com.subscribe.platform.subscribe.dto.ResShoppingDto;
-import com.subscribe.platform.subscribe.dto.ResSubscribeListDto;
+import com.subscribe.platform.subscribe.dto.*;
 import com.subscribe.platform.subscribe.service.SubscribeService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -41,5 +40,11 @@ public class SubscribeController {
     @ApiOperation(value = "구독하기")
     public void subscribe(@ModelAttribute("reqPayInfoDto") ReqPayInfoDto reqPayInfoDto) throws Exception{
         subscribeService.subscribe(reqPayInfoDto);
+    }
+
+    @PostMapping("/shopping")
+    @ApiOperation(value = "장바구니 넣기")
+    public void addShoppingList(@RequestBody CreateShoppingDto shoppingDto){
+        subscribeService.addShoppingList(shoppingDto);
     }
 }

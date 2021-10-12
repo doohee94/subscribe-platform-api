@@ -5,6 +5,7 @@ import com.subscribe.platform.services.entity.ServiceCycle;
 import com.subscribe.platform.services.entity.Services;
 import com.subscribe.platform.user.entity.Customer;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -52,27 +53,49 @@ public class Subscribe extends BaseTimeEntity {
     private PayInfo payInfo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="service_id")
+    @JoinColumn(name = "service_id")
     private Services services;
 
+    @Builder
+    public Subscribe( Status status, ServiceCycle deliveryCycle, String deliveryDay, LocalDateTime cancelDate,
+                     Long cancelReasonId, String cancelReasonEtc, int payScheduledPrice, LocalDateTime payScheduledDate,
+                     LocalDateTime subscribeStartDate, LocalDateTime shoppingDate, Set<PickedOption> pickedOptions, Customer customer,
+                     PayInfo payInfo, Services services) {
+        this.status = status;
+        this.deliveryCycle = deliveryCycle;
+        this.deliveryDay = deliveryDay;
+        this.cancelDate = cancelDate;
+        this.cancelReasonId = cancelReasonId;
+        this.cancelReasonEtc = cancelReasonEtc;
+        this.payScheduledPrice = payScheduledPrice;
+        this.payScheduledDate = payScheduledDate;
+        this.subscribeStartDate = subscribeStartDate;
+        this.shoppingDate = shoppingDate;
+        this.pickedOptions = pickedOptions;
+        this.customer = customer;
+        this.payInfo = payInfo;
+        this.services = services;
+
+        pickedOptions.forEach(t->t.updateSubscribe(this));
+
+    }
 
     // ============== 편의 메소드 ==============
-    public void cancelSubscribe(Long cancelReasonId, String cancelReasonEtc){
+    public void cancelSubscribe(Long cancelReasonId, String cancelReasonEtc) {
         this.status = Status.CANCEL;
         this.cancelDate = LocalDateTime.now();
         this.cancelReasonId = cancelReasonId;
         this.cancelReasonEtc = cancelReasonEtc;
     }
 
-    public void startSubscribe(){
+    public void startSubscribe() {
         this.status = Status.SUBSCRIBE;
         this.subscribeStartDate = LocalDateTime.now();
     }
 
-    public void setPayInfo(PayInfo payInfo){
+    public void setPayInfo(PayInfo payInfo) {
         this.payInfo = payInfo;
     }
-
 
 
 }
