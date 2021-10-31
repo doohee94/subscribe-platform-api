@@ -2,6 +2,7 @@ package com.subscribe.platform.config.error;
 
 import com.subscribe.platform.config.error.exception.BusinessException;
 import com.subscribe.platform.config.error.exception.ErrorCode;
+import io.jsonwebtoken.ClaimJwtException;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.bind.BindException;

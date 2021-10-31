@@ -1,12 +1,12 @@
 package com.subscribe.platform.services.entity;
 
 import com.subscribe.platform.common.entity.BaseTimeEntity;
-import com.subscribe.platform.services.dto.UpdateServiceDto;
-import com.subscribe.platform.services.dto.UpdateServiceOptionDto;
+import com.subscribe.platform.services.dto.ReqModifyServiceOptionDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -23,9 +23,11 @@ public class ServiceOption extends BaseTimeEntity {
 
     @Column(name = "option_name") @NotNull
     private String name;
-    @NotNull
+    @ColumnDefault(value = "0")
     private int price;
+    @ColumnDefault(value = "0")
     private int stock;  // 재고 수량(nullable)
+    @ColumnDefault(value = "0")
     private int maxCount;   // 최대주문가능갯수
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -45,7 +47,7 @@ public class ServiceOption extends BaseTimeEntity {
         this.services = services;
     }
 
-    public void updateServiceOption(UpdateServiceOptionDto optionDto){
+    public void updateServiceOption(ReqModifyServiceOptionDto optionDto){
         this.name = optionDto.getOptionName();
         this.price = optionDto.getPrice();
         this.stock = optionDto.getStock();

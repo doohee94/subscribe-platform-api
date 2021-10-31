@@ -1,7 +1,7 @@
 package com.subscribe.platform.user.service;
 
-import com.subscribe.platform.user.dto.UpdatePasswordDto;
-import com.subscribe.platform.user.dto.UpdateStoreDto;
+import com.subscribe.platform.user.dto.ReqModifyPasswordDto;
+import com.subscribe.platform.user.dto.ReqModifyStoreDto;
 import com.subscribe.platform.user.dto.UserDto;
 import com.subscribe.platform.user.entity.Authority;
 import com.subscribe.platform.user.entity.Store;
@@ -67,7 +67,7 @@ public class UserService {
         return result;
     }
 
-    public void updateStore(String email, UpdateStoreDto request) {
+    public void updateStore(String email, ReqModifyStoreDto request) {
         User user = findByEmail(email);
         Store store = user.getStore();
         store.updateStore(request.getStoreName(), request.getBusinessNum());
@@ -84,7 +84,7 @@ public class UserService {
     }
 
     @Transactional
-    public boolean updatePassword(UpdatePasswordDto passwordDto){
+    public boolean updatePassword(ReqModifyPasswordDto passwordDto){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(email);
 

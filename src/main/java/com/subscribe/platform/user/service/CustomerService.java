@@ -1,6 +1,6 @@
 package com.subscribe.platform.user.service;
 
-import com.subscribe.platform.user.dto.CustomerUpdateDto;
+import com.subscribe.platform.user.dto.ReqModifyCustomerDto;
 import com.subscribe.platform.user.dto.ResCustomerDto;
 import com.subscribe.platform.user.entity.User;
 import com.subscribe.platform.user.repository.UserRepository;
@@ -9,9 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityNotFoundException;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -23,10 +20,10 @@ public class CustomerService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void updateCustomers(CustomerUpdateDto customerUpdateDto) {
+    public void updateCustomers(ReqModifyCustomerDto reqModifyCustomerDto) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.findByEmail(email);
-        user.updateCustomer(customerUpdateDto);
+        user.updateCustomer(reqModifyCustomerDto);
 
         userRepository.save(user);
 

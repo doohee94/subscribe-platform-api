@@ -53,8 +53,13 @@ public class Services extends BaseTimeEntity {
     @OneToMany(mappedBy = "services", cascade = CascadeType.ALL)
     private Set<ServiceImage> serviceImages = new HashSet<>();
 
-    @OneToMany(mappedBy = "services")
-    private Set<Subscribe> subscribes;
+    // 구독
+    @OneToMany(mappedBy = "services", cascade = CascadeType.ALL)
+    private Set<Subscribe> subscribes = new HashSet<>();
+
+    // 후기
+    @OneToMany(mappedBy = "services", cascade = CascadeType.ALL)
+    private Set<Review> reviews = new HashSet<>();
 
     // ===== 연관관계 메소드 모음 =====
     public void setStore(Store store) {
@@ -112,7 +117,7 @@ public class Services extends BaseTimeEntity {
         this.detailContents = detailContents;
     }
 
-    public void updateServiceOption(UpdateServiceOptionDto optionDto) {
+    public void updateServiceOption(ReqModifyServiceOptionDto optionDto) {
         if(optionDto.getServiceOptionId() == null){
             addServiceOption(ServiceOption.builder()
                     .name(optionDto.getOptionName())
@@ -138,7 +143,7 @@ public class Services extends BaseTimeEntity {
         this.serviceCategories.clear();
     }
 
-    public void updateServiceImage(UpdateServiceImageDto imageDto) {
+    public void updateServiceImage(ReqModifyServiceImageDto imageDto) {
         if (imageDto.getServiceImageId() == null) {
             addServiceImage(ServiceImage.builder()
                     .imageType("THUMBNAIL".equals(imageDto.getImageType()) ? ImageType.THUMBNAIL : ImageType.DETAIL)

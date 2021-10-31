@@ -21,7 +21,7 @@ public class PayInfo extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String CreditCardCompany;
+    private String creditCardCompany;
     private String cardNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -43,8 +43,13 @@ public class PayInfo extends BaseTimeEntity {
 
     @Builder
     public PayInfo(String creditCardCompany, String cardNo, Subscribe subscribe) {
-        CreditCardCompany = creditCardCompany;
+        this.creditCardCompany = creditCardCompany;
         this.cardNo = cardNo;
         addSubscribe(subscribe);
+    }
+
+    // 저장된 정보인지 확인
+    public boolean isSavedInfo(String cardNo, String creditCardCompany){
+        return this.cardNo.equals(cardNo) && this.creditCardCompany.equals(creditCardCompany);
     }
 }

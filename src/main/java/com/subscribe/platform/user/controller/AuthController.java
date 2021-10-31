@@ -1,9 +1,8 @@
 package com.subscribe.platform.user.controller;
 
 import com.subscribe.platform.config.securityAndJwtConfig.util.JwtUtil;
-import com.subscribe.platform.user.dto.LoginDto;
+import com.subscribe.platform.user.dto.ReqLoginDto;
 import com.subscribe.platform.user.dto.ResLoginDto;
-import com.subscribe.platform.user.entity.User;
 import com.subscribe.platform.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,8 +27,8 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public ResLoginDto login(@RequestBody LoginDto loginDto) throws Exception {
-        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+    public ResLoginDto login(@RequestBody @Validated ReqLoginDto reqLoginDto) throws Exception {
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(reqLoginDto.getEmail(), reqLoginDto.getPassword()));
 
         if (authenticate.isAuthenticated()) { // 권한이 있는 경우
             ResLoginDto response = new ResLoginDto();

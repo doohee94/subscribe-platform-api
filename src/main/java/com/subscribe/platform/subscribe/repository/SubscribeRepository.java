@@ -20,4 +20,7 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
     Optional<Subscribe> findByIdAndStatusAndCustomerId(@Param("subscribeId") Long subscribeId, @Param("status") Status status, @Param("customerId") Long customerId);
 
     List<Subscribe> findByIdIn(@Param("subscribeIds") List<Long> subscribeIds);
+
+    // 삭제
+    Subscribe deleteByIdAndCustomerIdAndStatus(@Param("subscribeId") Long subscribeId, @Param("customerId") Long customerId, @Param("status") Status status);
 }

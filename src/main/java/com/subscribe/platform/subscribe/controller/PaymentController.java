@@ -23,7 +23,7 @@ public class PaymentController {
 
     @GetMapping("/payment-results")
     @ApiOperation(value = "결제내역 조회")
-    public ListResponse<ResPaymentHistoryDto> paymentResults(@ModelAttribute ReqPaymentHistoryDto reqPaymentHistoryDto, PageableDto pageableDto){
+    public ListResponse<ResPaymentHistoryDto> paymentResults(@Valid @ModelAttribute ReqPaymentHistoryDto reqPaymentHistoryDto, PageableDto pageableDto){
         return paymentService.paymentResult(reqPaymentHistoryDto, pageableDto.toPageRequest());
     }
 }

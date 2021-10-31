@@ -2,11 +2,8 @@ package com.subscribe.platform.services.dto;
 
 import com.subscribe.platform.services.entity.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
@@ -17,7 +14,7 @@ public class ResStoreServiceDto {
     private String serviceCycle;
     private String availableDay;
     private String detailContents;
-    private List<CreateServiceOptionDto> serviceOptions;
+    private List<ReqRegistServiceOptionDto> serviceOptions;
     private List<ResServiceImageDto> serviceImages;
     private List<ResCategoryDto> categories;
 
@@ -29,7 +26,7 @@ public class ResStoreServiceDto {
         this.detailContents = services.getDetailContents();
 
         this.serviceOptions = services.getServiceOptions().stream()
-                .map(o -> CreateServiceOptionDto.builder()
+                .map(o -> ReqRegistServiceOptionDto.builder()
                         .optionName(o.getName())
                         .price(o.getPrice())
                         .stock(o.getStock())
