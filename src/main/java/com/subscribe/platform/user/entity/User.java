@@ -1,8 +1,7 @@
 package com.subscribe.platform.user.entity;
 
 import com.subscribe.platform.common.entity.BaseTimeEntity;
-import com.subscribe.platform.user.dto.CustomerUpdateDto;
-import com.subscribe.platform.user.dto.UpdatePasswordDto;
+import com.subscribe.platform.user.dto.ReqModifyCustomerDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -92,13 +91,13 @@ public class User extends BaseTimeEntity {
         this.customer = customer;
     }
 
-    public void updateCustomer(CustomerUpdateDto customerUpdateDto) {
+    public void updateCustomer(ReqModifyCustomerDto reqModifyCustomerDto) {
         if(this.customer == null){
-            this.customer = customerUpdateDto.toEntity();
+            this.customer = reqModifyCustomerDto.toEntity();
             this.customer.setUser(this);
         }
 
-        this.customer.update(customerUpdateDto);
+        this.customer.update(reqModifyCustomerDto);
 
     }
 

@@ -6,7 +6,7 @@ import com.subscribe.platform.user.entity.Phone;
 import lombok.Getter;
 
 @Getter
-public class CustomerUpdateDto {
+public class ReqModifyCustomerDto {
 
     private Address address;
     private Phone phone;

@@ -39,7 +39,7 @@ public class SubscribeService {
     /**
      * 나의 구독 리스트 조회
      */
-    public ListResponse<ResSubscribeListDto> subscribesByCustomer() throws Exception {
+    public ListResponse<ResSubscribeListDto> subscribesByCustomer(){
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(email);
@@ -77,16 +77,21 @@ public class SubscribeService {
      * 구독취소
      */
     @Transactional
-    public void cancelSubscribe(ReqCancelSubscribeDto cancelDto) throws Exception {
-        Optional<Subscribe> subscribe = subscribeRepository.findByIdAndStatus(cancelDto.getSubscribeId(), Status.SUBSCRIBE);
+    public void cancelSubscribe(ReqCancelSubscribeDto cancelDto){
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email);
+
+        Subscribe subscribe = subscribeRepository.findByIdAndStatus(cancelDto.getSubscribeId(), Status.SUBSCRIBE).orElseThrow(EntityNotFoundException::new);
         // 취소
-        subscribe.orElseThrow(EntityNotFoundException::new).cancelSubscribe(cancelDto.getCancelReasonId(), cancelDto.getCancelReasonEtc());
+        subscribe.cancelSubscribe(cancelDto.getCancelReasonId(), cancelDto.getCancelReasonEtc());
+
     }
 
     /**
      * 장바구니 리스트
      */
-    public ListResponse<ResShoppingDto> shoppingList() throws Exception {
+    public ListResponse<ResShoppingDto> shoppingList(){
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(email);
@@ -116,20 +121,28 @@ public class SubscribeService {
     }
 
     /**
+     * 장바구니 물건 삭제
+     */
+    public void removeShopping(Long subscribeId){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Customer customer = userRepository.findByEmail(email).getCustomer();
+
+        subscribeRepository.deleteByIdAndCustomerIdAndStatus(subscribeId, customer.getId(), Status.SHOPPING);
+
+    }
+
+    /**
      * 구독하기
      */
     @Transactional
-    public void subscribe(ReqPayInfoDto payInfoDto) throws Exception {
+    public void subscribe(ReqPayInfoDto payInfoDto){
 
-        // 장바구니에 담은 아이디가 없을 경우 에러발생
-        if (payInfoDto.getSubscribeIds().isEmpty()) {
-            throw new NoSuchFieldException();
-        }
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customer = userRepository.findByEmail(email).getCustomer();
 
-        int totalPrice = 0;
+        int totalPrice =0;
+        String subscribes = "";
         // 장바구니정보 확인
         for (Long subscribeId : payInfoDto.getSubscribeIds()) {
             Subscribe subscribe = subscribeRepository.findByIdAndStatusAndCustomerId(subscribeId, Status.SHOPPING, customer.getId()).orElseThrow(EntityNotFoundException::new);
@@ -139,7 +152,7 @@ public class SubscribeService {
 
             Set<PickedOption> pickedOptions = subscribe.getPickedOptions();
             // 2. 정상적으로 끝나면 총 결제금액 계산 (option가격 다 더해서 결제정보 save하자)
-            if (pickedOptions == null) {
+            if(pickedOptions == null){
                 throw new EntityNotFoundException("결제할 서비스의 옵션이 존재하지 않음");
             }
             for (PickedOption pickedOption : pickedOptions) {
@@ -149,14 +162,15 @@ public class SubscribeService {
 
             // 3. 결제정보 조회 : 기존 결제정보에 일치하는정보가 있는지 확인. 없으면 새로 저장
             Set<PayInfo> payInfos = customer.getPayInfos();
-            boolean isSavedPayInfo = false;
+            boolean isSaved = false;
             for (PayInfo payInfo : payInfos) {
-                if (payInfo.getCardNo().equals(payInfo.getCardNo()) && payInfo.getCreditCardCompany().equals(payInfo.getCreditCardCompany())) {   // 기존 정보 존재하는 경우
+                if(payInfo.isSavedInfo(payInfoDto.getCardNo(), payInfoDto.getCreditCardCompany())){   // 기존 정보 존재하는 경우
                     payInfo.addSubscribe(subscribe);
-                    isSavedPayInfo = true;
+                    isSaved = true;
+                    break;
                 }
             }
-            if (!isSavedPayInfo) {    // 기존정보 존재 안하는 경우 새로 결제정보 만들어서 저장
+            if(!isSaved){    // 기존정보 존재 안하는 경우 새로 결제정보 만들어서 저장
                 PayInfo newPayInfo = PayInfo.builder()
                         .creditCardCompany(payInfoDto.getCreditCardCompany())
                         .cardNo(payInfoDto.getCardNo())
@@ -165,15 +179,25 @@ public class SubscribeService {
 
                 customer.addPayInfo(newPayInfo);
             }
+
+            subscribes += subscribe.getId()+",";
         }
 
         // 4. 결제 결과 저장
+        savePaymentResult(payInfoDto, customer, totalPrice, subscribes);
+    }
+
+    /**
+     * 결제 결과 저장 메서드
+     */
+    private void savePaymentResult(ReqPayInfoDto payInfoDto, Customer customer, int totalPrice, String subscribes) {
         PaymentResult paymentResult = PaymentResult.builder()
                 .status(PayStatus.PAID)
                 .ownerId(customer.getId())
                 .creditCardCompany(payInfoDto.getCreditCardCompany())
                 .paidCardNo(payInfoDto.getCardNo())
                 .payPrice(totalPrice)
+                .subscribes(subscribes.substring(0, subscribes.length()-1))
                 .build();
         paymentResultRepository.save(paymentResult);
     }

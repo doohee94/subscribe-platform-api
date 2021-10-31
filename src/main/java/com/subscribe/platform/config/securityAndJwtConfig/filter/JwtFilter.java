@@ -1,12 +1,15 @@
 package com.subscribe.platform.config.securityAndJwtConfig.filter;
 
+import com.subscribe.platform.config.error.exception.AccessDeniedException;
 import com.subscribe.platform.config.securityAndJwtConfig.SecurityConfig;
 import com.subscribe.platform.config.securityAndJwtConfig.service.CustomUserDetailService;
 import com.subscribe.platform.config.securityAndJwtConfig.util.JwtUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -25,7 +28,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private final CustomUserDetailService service;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, ExpiredJwtException {
         String autorizationHeader = request.getHeader(SecurityConfig.AUTHENTICATION_HEADER_NAME);
 
         String token = null;
@@ -33,7 +36,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if(autorizationHeader != null){
             token = autorizationHeader;
-            email = jwtUtil.extractUsername(token);
+            if(jwtUtil.isTokenExpired(token)){   // 토큰 만료 에러 잡기 위해
+                email = jwtUtil.extractUsername(token);
+            }
+
         }
 
         /**
@@ -49,6 +55,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
 
+        // 꼭 써줘야 다른 필터가 존재하면 필터 진행하고 없으면 서블릿 실행
         filterChain.doFilter(request, response);
     }
 }

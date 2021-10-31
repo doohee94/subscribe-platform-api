@@ -91,6 +91,7 @@ public class Subscribe extends BaseTimeEntity {
     public void startSubscribe() {
         this.status = Status.SUBSCRIBE;
         this.subscribeStartDate = LocalDateTime.now();
+        this.payScheduledDate = LocalDateTime.now().plusMonths(1);
     }
 
     public void setPayInfo(PayInfo payInfo) {

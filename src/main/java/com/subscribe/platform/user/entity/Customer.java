@@ -1,9 +1,10 @@
 package com.subscribe.platform.user.entity;
 
 import com.subscribe.platform.common.entity.BaseTimeEntity;
+import com.subscribe.platform.services.entity.Review;
 import com.subscribe.platform.subscribe.entity.PayInfo;
 import com.subscribe.platform.subscribe.entity.Subscribe;
-import com.subscribe.platform.user.dto.CustomerUpdateDto;
+import com.subscribe.platform.user.dto.ReqModifyCustomerDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,6 +41,9 @@ public class Customer extends BaseTimeEntity {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<PayInfo> payInfos = new HashSet<>();
 
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private Set<Review> reviews = new HashSet<>();
+
 
     @Builder
     public Customer(Address address, Phone phone) {
@@ -52,13 +56,14 @@ public class Customer extends BaseTimeEntity {
         user.setCustomer(this);
     }
 
-    public void update(CustomerUpdateDto customerUpdateDto) {
-        this.address = customerUpdateDto.getAddress();
-        this.phone = customerUpdateDto.getPhone();
+    public void update(ReqModifyCustomerDto reqModifyCustomerDto) {
+        this.address = reqModifyCustomerDto.getAddress();
+        this.phone = reqModifyCustomerDto.getPhone();
     }
 
     public void addPayInfo(PayInfo payInfo){
         this.payInfos.add(payInfo);
         payInfo.setCustomer(this);
     }
+
 }

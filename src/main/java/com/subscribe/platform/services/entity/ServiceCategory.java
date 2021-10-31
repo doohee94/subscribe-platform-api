@@ -1,7 +1,6 @@
 package com.subscribe.platform.services.entity;
 
 import com.subscribe.platform.common.entity.BaseTimeEntity;
-import com.subscribe.platform.services.dto.UpdateServiceCategoryDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,13 +1,15 @@
 package com.subscribe.platform.user.controller;
 
-import com.subscribe.platform.user.dto.UpdatePasswordDto;
-import com.subscribe.platform.user.dto.UpdateStoreDto;
+import com.subscribe.platform.user.dto.ReqModifyPasswordDto;
+import com.subscribe.platform.user.dto.ReqModifyStoreDto;
 import com.subscribe.platform.user.dto.ResUserDto;
 import com.subscribe.platform.user.dto.UserDto;
 import com.subscribe.platform.user.entity.User;
 import com.subscribe.platform.user.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,19 +22,16 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/test")
-    public void test(String email) {
-
-        System.out.println(userService.findByEmail(email));
-    }
-
     @PostMapping("/sign-up")
-    public void createUser(@RequestBody UserDto.CreateUserDto createUserDto) {
+    @ApiOperation("회원가입")
+    public void createUser(@Validated @RequestBody UserDto.CreateUserDto createUserDto){
+
         userService.createUser(createUserDto);
     }
 
     @GetMapping("/checkEmailDupl")
-    public Map checkEmailDupl(String email) {
+    @ApiOperation("이메일 중복확인")
+    public Map checkEmailDupl(@RequestParam(value = "email") String email) {
         return userService.findCheckByEmail(email);
     }
 
@@ -46,6 +45,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/store/getStoreinfo")
+    @ApiOperation("판매자 정보 조회")
     public ResUserDto getStoreInfo(){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();    // 나중에 변경 예정
         User result = userService.findByEmail(email);
@@ -66,7 +66,9 @@ public class UserController {
      */
     // put patch 등은 @RequestBody로 해서 body를 받아야한다.
     @PutMapping("/store/updateStoreinfo")
-    public void updateStoreinfo(@Valid @RequestBody UpdateStoreDto request){
+    @ApiOperation("판매자 정보 수정")
+    public void updateStoreinfo(@Valid @RequestBody ReqModifyStoreDto request){
+
         String email = SecurityContextHolder.getContext().getAuthentication().getName();    // 나중에 변경 예정
         userService.updateStore(email, request);
     }
@@ -75,7 +77,9 @@ public class UserController {
      * 비밀번호 변경
      */
     @PostMapping("/password")
-    public boolean updatePassword(@RequestBody UpdatePasswordDto passwordDto){
+    @ApiOperation("비밀번호 변경")
+    public boolean updatePassword(@Valid @RequestBody ReqModifyPasswordDto passwordDto){
+
         return userService.updatePassword(passwordDto);
     }
 }

@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum UserStatus {
     WAITING,
     FAIL,
+    WITHDRAWAL
     ;
 
 

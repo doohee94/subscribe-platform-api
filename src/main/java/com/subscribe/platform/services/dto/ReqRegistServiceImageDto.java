@@ -4,11 +4,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 @NoArgsConstructor
-public class CreateServiceImageDto {
+public class ReqRegistServiceImageDto {
 
+    @NotBlank
     private String imageType;
+    @NotBlank
     private int imageSeq;
     private MultipartFile imageFile;
 

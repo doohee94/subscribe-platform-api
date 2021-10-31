@@ -6,7 +6,7 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter @Setter
-public class UpdateServiceImageDto {
+public class ReqModifyServiceImageDto {
     private Long serviceImageId;
     private String imageType;
     private int imageSeq;

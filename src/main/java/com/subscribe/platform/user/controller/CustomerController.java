@@ -1,9 +1,8 @@
 package com.subscribe.platform.user.controller;
 
-import com.subscribe.platform.user.dto.CustomerUpdateDto;
+import com.subscribe.platform.user.dto.ReqModifyCustomerDto;
 import com.subscribe.platform.user.dto.ResCustomerDto;
 import com.subscribe.platform.user.service.CustomerService;
-import com.subscribe.platform.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +14,9 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PatchMapping
-    public void UpdateCustomers(@RequestBody CustomerUpdateDto customerUpdateDto){
+    public void UpdateCustomers(@RequestBody ReqModifyCustomerDto reqModifyCustomerDto){
 
-        customerService.updateCustomers(customerUpdateDto);
+        customerService.updateCustomers(reqModifyCustomerDto);
     }
 
     @GetMapping

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class UpdateServiceOptionDto{
+public class ReqModifyServiceOptionDto {
     private Long serviceOptionId;
     private String optionName;
     private int price;

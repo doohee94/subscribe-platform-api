@@ -5,14 +5,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UpdateStoreDto {
+public class ReqModifyStoreDto {
+
+    @NotBlank
     private String storeName;
+    @NotBlank
     private String businessNum;
 
     @Builder
-    public UpdateStoreDto(String storeName, String businessNum){
+    public ReqModifyStoreDto(String storeName, String businessNum){
         this.storeName = storeName;
         this.businessNum = businessNum;
     }
