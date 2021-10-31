@@ -59,7 +59,7 @@ values (2,now(),now(),'인천광역시','동구','1234','01098765432',5);
 
 
 insert into store (store_id, business_num, store_name, user_id)
-values (1, '12341234','견과류가게',1);
+values (1, '12341234','견과류가게',3);
 
 
 insert into category values(1, now(), now(),'식품');
