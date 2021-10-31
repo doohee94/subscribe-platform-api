@@ -1,5 +1,6 @@
 package com.subscribe.platform.services.dto;
 
+import com.subscribe.platform.services.entity.ServiceOption;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,4 +26,10 @@ public class ReqRegistServiceOptionDto {
         this.maxCount = maxCount;
     }
 
+    public CreateServiceOptionDto(ServiceOption serviceOption) {
+        this(serviceOption.getName(),
+                serviceOption.getPrice(),
+                serviceOption.getStock(),
+                serviceOption.getMaxCount());
+    }
 }

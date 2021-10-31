@@ -41,6 +41,13 @@ public class ServicesService {
 
     private final ServicesQuerydslRepository servicesQuerydslRepository;
 
+
+    public ResServiceDetailDto getServiceById(Long id){
+        Services serviceDetail = servicesRepository.findServiceDetail(id).orElseThrow(EntityNotFoundException::new);
+        return new ResServiceDetailDto(serviceDetail);
+    }
+
+
     /**
      * 사용자) 서비스 리스트 조회(그냥 검색, 서비스이름 검색)
      */

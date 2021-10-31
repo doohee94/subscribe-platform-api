@@ -10,6 +10,11 @@ public class SelectBox<T> {
         this.label = label;
     }
 
+    public SelectBox(T value) {
+        this.value = value;
+        this.label = value;
+    }
+
 
     public T getValue() {
         return this.value;

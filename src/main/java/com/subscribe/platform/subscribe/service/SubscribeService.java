@@ -3,7 +3,9 @@ package com.subscribe.platform.subscribe.service;
 import com.subscribe.platform.common.model.ListResponse;
 import com.subscribe.platform.services.entity.ImageType;
 import com.subscribe.platform.services.entity.ServiceOption;
+import com.subscribe.platform.services.entity.Services;
 import com.subscribe.platform.services.repository.ServiceOptionRepository;
+import com.subscribe.platform.services.repository.ServicesRepository;
 import com.subscribe.platform.subscribe.dto.*;
 import com.subscribe.platform.subscribe.entity.*;
 import com.subscribe.platform.subscribe.repository.PaymentResultRepository;
@@ -30,6 +32,7 @@ public class SubscribeService {
 
     private final SubscribeRepository subscribeRepository;
     private final ServiceOptionRepository serviceOptionRepository;
+    private final ServicesRepository servicesRepository;
     private final UserRepository userRepository;
     private final PaymentResultRepository paymentResultRepository;
 
@@ -134,10 +137,6 @@ public class SubscribeService {
     @Transactional
     public void subscribe(ReqPayInfoDto payInfoDto){
 
-//        // 장바구니에 담은 아이디가 없을 경우 에러발생
-//        if(payInfoDto.getSubscribeIds().isEmpty()){
-//            throw new NoSuchFieldException();
-//        }
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customer = userRepository.findByEmail(email).getCustomer();
@@ -201,5 +200,19 @@ public class SubscribeService {
                 .subscribes(subscribes.substring(0, subscribes.length()-1))
                 .build();
         paymentResultRepository.save(paymentResult);
+    }
+
+    public void addShoppingList(CreateShoppingDto shoppingDto) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Customer customer = userRepository.findByEmail(email).getCustomer();
+
+        Services services = servicesRepository
+                .findById(shoppingDto.getServiceId())
+                .orElseThrow(EntityNotFoundException::new);
+
+        Subscribe subscribe = shoppingDto.of(customer, services);
+
+        subscribeRepository.save(subscribe);
+
     }
 }

@@ -48,6 +48,14 @@ public class ServicesController {
         return servicesService.getNewServiceList(pageableDto.toPageRequest());
     }
 
+
+    @GetMapping("/services/{id}")
+    @ApiOperation(value = "서비스 상세 조회")
+    public ResServiceDetailDto getServiceById(@PathVariable Long id){
+        return servicesService.getServiceById(id);
+    }
+
+
     @PostMapping("/customer/review")
     @ApiOperation(value = "후기 등록")
     public Object writeReview(@Validated @ModelAttribute("createReviewDto") ReqRegistReviewDto reviewDto) throws Exception{

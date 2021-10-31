@@ -6,4 +6,9 @@ import lombok.Getter;
 public enum ServiceCycle {
     MONTH,
     WEEK
+    ;
+
+
+
+
 }

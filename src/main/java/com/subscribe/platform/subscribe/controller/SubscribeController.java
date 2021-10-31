@@ -1,10 +1,7 @@
 package com.subscribe.platform.subscribe.controller;
 
 import com.subscribe.platform.common.model.ListResponse;
-import com.subscribe.platform.subscribe.dto.ReqCancelSubscribeDto;
-import com.subscribe.platform.subscribe.dto.ReqPayInfoDto;
-import com.subscribe.platform.subscribe.dto.ResShoppingDto;
-import com.subscribe.platform.subscribe.dto.ResSubscribeListDto;
+import com.subscribe.platform.subscribe.dto.*;
 import com.subscribe.platform.subscribe.service.SubscribeService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -52,5 +49,11 @@ public class SubscribeController {
     public void subscribe(@Validated @RequestBody ReqPayInfoDto reqPayInfoDto){
 
         subscribeService.subscribe(reqPayInfoDto);
+    }
+
+    @PostMapping("/shopping")
+    @ApiOperation(value = "장바구니 넣기")
+    public void addShoppingList(@RequestBody CreateShoppingDto shoppingDto){
+        subscribeService.addShoppingList(shoppingDto);
     }
 }
