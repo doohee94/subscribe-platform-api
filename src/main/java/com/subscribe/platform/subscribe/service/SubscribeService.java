@@ -123,11 +123,14 @@ public class SubscribeService {
     /**
      * 장바구니 물건 삭제
      */
+    @Transactional
     public void removeShopping(Long subscribeId){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customer = userRepository.findByEmail(email).getCustomer();
 
-        subscribeRepository.deleteByIdAndCustomerIdAndStatus(subscribeId, customer.getId(), Status.SHOPPING);
+        subscribeRepository.delete(
+                subscribeRepository.findByIdAndStatusAndCustomerId(subscribeId, Status.SHOPPING, customer.getId()).orElseThrow(EntityNotFoundException::new)
+        );
 
     }
 

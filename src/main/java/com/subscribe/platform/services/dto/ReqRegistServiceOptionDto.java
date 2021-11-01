@@ -26,10 +26,10 @@ public class ReqRegistServiceOptionDto {
         this.maxCount = maxCount;
     }
 
-    public CreateServiceOptionDto(ServiceOption serviceOption) {
-        this(serviceOption.getName(),
-                serviceOption.getPrice(),
-                serviceOption.getStock(),
-                serviceOption.getMaxCount());
+    public ReqRegistServiceOptionDto(ServiceOption serviceOption) {
+        this.optionName = serviceOption.getName();
+        this.price = serviceOption.getPrice();
+        this.stock = serviceOption.getStock();
+        this.maxCount = serviceOption.getMaxCount();
     }
 }
