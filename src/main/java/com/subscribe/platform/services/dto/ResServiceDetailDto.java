@@ -17,7 +17,7 @@ public class ResServiceDetailDto {
     private List<SelectBox<String>> serviceCycle;
     private List<SelectBox<String>> availableDay;
     private String detailContents;
-    private List<CreateServiceOptionDto> serviceOptions;
+    private List<ReqRegistServiceOptionDto> serviceOptions;
     private List<String> serviceImages;
 
 
@@ -34,7 +34,7 @@ public class ResServiceDetailDto {
         this.detailContents = serviceDetail.getDetailContents();
 
         this.serviceOptions = serviceDetail.getServiceOptions().stream()
-                .map(CreateServiceOptionDto::new)
+                .map(ReqRegistServiceOptionDto::new)
                 .collect(Collectors.toList());
 
         this.serviceImages = serviceDetail.getServiceImages().stream()
