@@ -10,9 +10,9 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class ReqRegistServiceImageDto {
 
-    @NotBlank
+
     private String imageType;
-    @NotBlank
+
     private int imageSeq;
     private MultipartFile imageFile;
 

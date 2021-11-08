@@ -8,6 +8,6 @@ import javax.validation.constraints.NotBlank;
 @Data
 @NoArgsConstructor
 public class ReqRegistCategoryDto {
-    @NotBlank
+
     private Long categoryId;
 }
