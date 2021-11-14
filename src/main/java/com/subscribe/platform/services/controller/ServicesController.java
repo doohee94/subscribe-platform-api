@@ -8,6 +8,7 @@ import com.subscribe.platform.services.service.ServicesService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,9 +57,9 @@ public class ServicesController {
     }
 
 
-    @PostMapping("/customer/review")
+    @PostMapping(value="/customer/review", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "후기 등록")
-    public Object writeReview(@Validated @ModelAttribute("createReviewDto") ReqRegistReviewDto reviewDto) throws Exception{
+    public Object writeReview(@Validated @ModelAttribute("requestReviewDto") ReqRegistReviewDto reviewDto) throws Exception{
 
         servicesService.writeReview(reviewDto);
 

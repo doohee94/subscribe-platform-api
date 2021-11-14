@@ -129,7 +129,8 @@ public class SubscribeService {
         Customer customer = userRepository.findByEmail(email).getCustomer();
 
         subscribeRepository.delete(
-                subscribeRepository.findByIdAndStatusAndCustomerId(subscribeId, Status.SHOPPING, customer.getId()).orElseThrow(EntityNotFoundException::new)
+                subscribeRepository.findByIdAndStatusAndCustomerId(subscribeId, Status.SHOPPING, customer.getId())
+                        .orElseThrow(EntityNotFoundException::new)
         );
 
     }
@@ -139,7 +140,6 @@ public class SubscribeService {
      */
     @Transactional
     public void subscribe(ReqPayInfoDto payInfoDto){
-
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customer = userRepository.findByEmail(email).getCustomer();
@@ -205,6 +205,9 @@ public class SubscribeService {
         paymentResultRepository.save(paymentResult);
     }
 
+    /**
+     * 쇼핑리스트 등록
+     */
     public void addShoppingList(CreateShoppingDto shoppingDto) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Customer customer = userRepository.findByEmail(email).getCustomer();
