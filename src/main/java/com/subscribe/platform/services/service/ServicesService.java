@@ -8,6 +8,7 @@ import com.subscribe.platform.common.properties.GlobalProperties;
 import com.subscribe.platform.services.dto.*;
 import com.subscribe.platform.services.entity.*;
 import com.subscribe.platform.services.repository.*;
+import com.subscribe.platform.subscribe.repository.SubscribeRepository;
 import com.subscribe.platform.user.entity.Customer;
 import com.subscribe.platform.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,7 @@ public class ServicesService {
     private final ServicesRepository servicesRepository;
     private final CategoryRepository categoryRepository;
     private final ReviewRepository reviewRepository;
+    private final SubscribeRepository subscribeRepository;
 
     private final ServicesQuerydslRepository servicesQuerydslRepository;
 
@@ -138,8 +140,8 @@ public class ServicesService {
         }
 
         // service
-        Services service = servicesRepository.findById(reviewDto.getServiceId())
-                .orElseThrow(EntityNotFoundException::new);
+        Services service = subscribeRepository.findById(reviewDto.getSubscribeId()).orElseThrow(EntityNotFoundException::new)
+                .getServices();
 
         Review review = Review.builder()
                 .title(reviewDto.getTitle())
