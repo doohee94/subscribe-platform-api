@@ -18,5 +18,5 @@ public class ReqRegistReviewDto {
     private String content;
     private List<MultipartFile> imageFiles;
     @NotNull
-    private Long serviceId;
+    private Long subscribeId;
 }

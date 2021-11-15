@@ -52,7 +52,7 @@ public class SubscribeController {
     }
 
     @PostMapping("/shopping")
-    @ApiOperation(value = "장바구니 넣기")
+    @ApiOperation(value = "장바구니 담기")
     public void addShoppingList(@RequestBody CreateShoppingDto shoppingDto){
         subscribeService.addShoppingList(shoppingDto);
     }

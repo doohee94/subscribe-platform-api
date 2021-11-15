@@ -30,8 +30,6 @@ public interface ServicesRepository extends JpaRepository<Services, Long> {
     @Query("SELECT s FROM Services s WHERE s.id = :serviceId")
     Optional<Services> findServiceDetail(@Param("serviceId") Long serviceId);
 
-    int deleteByIdAndStore_Id(Long id, Long storeId);
-
     @Query("SELECT s " +
             "FROM Services s JOIN FETCH ServiceImage si " +
             "ON s.id = si.services.id " +

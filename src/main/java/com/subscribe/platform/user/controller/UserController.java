@@ -29,7 +29,7 @@ public class UserController {
         userService.createUser(createUserDto);
     }
 
-    @GetMapping("/checkEmailDupl")
+    @GetMapping("/email-dupl")
     @ApiOperation("이메일 중복확인")
     public Map checkEmailDupl(@RequestParam(value = "email") String email) {
         return userService.findCheckByEmail(email);
@@ -44,7 +44,7 @@ public class UserController {
      * 판매자 정보 조회
      * @return
      */
-    @GetMapping("/store/getStoreinfo")
+    @GetMapping("/store/storeinfo")
     @ApiOperation("판매자 정보 조회")
     public ResUserDto getStoreInfo(){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();    // 나중에 변경 예정
@@ -65,7 +65,7 @@ public class UserController {
      * @param request
      */
     // put patch 등은 @RequestBody로 해서 body를 받아야한다.
-    @PutMapping("/store/updateStoreinfo")
+    @PatchMapping("/store/storeinfo-form")
     @ApiOperation("판매자 정보 수정")
     public void updateStoreinfo(@Valid @RequestBody ReqModifyStoreDto request){
 
