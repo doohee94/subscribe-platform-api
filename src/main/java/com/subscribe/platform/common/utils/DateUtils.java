@@ -2,11 +2,10 @@ package com.subscribe.platform.common.utils;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.chrono.ChronoLocalDate;
+import java.time.format.DateTimeFormatter;
 
 import com.subscribe.platform.common.exception.InvalidDateTypeException;
 
-import jdk.vm.ci.meta.Local;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -62,4 +61,7 @@ public class DateUtils {
 			|| date.getDayOfWeek() == DayOfWeek.SUNDAY;
 	}
 
+	public static LocalDate convertStringToLocalDate(String date) {
+		return LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
+	}
 }

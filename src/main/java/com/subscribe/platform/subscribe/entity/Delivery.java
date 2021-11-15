@@ -1,6 +1,5 @@
 package com.subscribe.platform.subscribe.entity;
 
-import com.subscribe.platform.subscribe.entity.Subscribe;
 import com.subscribe.platform.user.entity.Store;
 import java.time.LocalDate;
 import javax.persistence.CascadeType;
