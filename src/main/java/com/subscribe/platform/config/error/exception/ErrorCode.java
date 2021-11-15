@@ -16,8 +16,10 @@ public enum ErrorCode {
     //auth
     INVALID_TOKEN(401, "UNAUTHORIZED", "invalid token"),
     JWT_EXPIRED(401,"UNAUTHORIZED", "JWT Token expired"),
-    LOGIN_FAIL(401, "UNAUTHORIZED", "login fail");
+    LOGIN_FAIL(401, "UNAUTHORIZED", "login fail"),
 
+    //date
+    INVALID_DATE_TYPE(400, "INVALID_DATE_TYPE","잘못된 날짜 형식"),
     ;
     private final String code;
     private final String message;

@@ -14,6 +14,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table(name = "service")
 @Getter
@@ -34,6 +36,7 @@ public class Services extends BaseTimeEntity {
     private String availableDay; // 판매자가 가능한 배송일, 요일 (쉼표로 구분)
 
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     private String detailContents;
 
     // 판매자
