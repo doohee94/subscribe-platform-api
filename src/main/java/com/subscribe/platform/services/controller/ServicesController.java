@@ -12,7 +12,10 @@ import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -64,5 +67,29 @@ public class ServicesController {
         servicesService.writeReview(reviewDto);
 
         return reviewDto;
+    }
+
+    @GetMapping("/services/weekly-popularity")
+    @ApiOperation(value = "주간 인기 순위")
+    public ListResponse<ResServiceListDto> weeklyPopularity(){
+        return servicesService.weeklyPopularity();
+    }
+
+    @GetMapping("/services/recent")
+    @ApiOperation(value = "최근 본 서비스 조회")
+    public ListResponse<ResServiceListDto> recentService(@RequestParam(value="ids", defaultValue = "") String ids){
+
+        List<Long> idList = new ArrayList<>();
+        if(!"".equals(ids)){
+            idList = Arrays.stream(ids.split(","))
+                    .filter(id -> !id.equals(""))
+                    .map(id -> Long.valueOf(id)).collect(Collectors.toList());
+        }
+
+        if(idList.size() == 0){
+            return null;
+        }
+
+        return servicesService.recentService(idList);
     }
 }

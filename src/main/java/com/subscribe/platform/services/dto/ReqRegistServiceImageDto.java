@@ -5,15 +5,17 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 @Data
 @NoArgsConstructor
 public class ReqRegistServiceImageDto {
 
-    @NotBlank
+//    @NotBlank
     private String imageType;
-    @NotBlank
+//    @NotBlank
     private int imageSeq;
+//    @NotEmpty
     private MultipartFile imageFile;
 
     public void setImageType(String imageType) {

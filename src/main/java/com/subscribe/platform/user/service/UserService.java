@@ -31,6 +31,7 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    @Transactional
     public void createUser(UserDto.CreateUserDto createUserDto) {
 
         String authName = createUserDto.isStore() ? "STORE" : "USER";
@@ -67,6 +68,7 @@ public class UserService {
         return result;
     }
 
+    @Transactional
     public void updateStore(String email, ReqModifyStoreDto request) {
         User user = findByEmail(email);
         Store store = user.getStore();

@@ -17,12 +17,12 @@ public class ReqRegistServiceDto {
     private String serviceCycle;
     @NotBlank
     private String availableDay;
-    @NotBlank
+//    @NotBlank
     private String detailContents;
 
     @NotEmpty
     private List<ReqRegistServiceOptionDto> serviceOptions;
-    @NotEmpty
+//    @NotEmpty
     private List<ReqRegistServiceImageDto> serviceImages;
     @NotEmpty
     private List<ReqRegistCategoryDto> categories;

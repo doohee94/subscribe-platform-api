@@ -14,7 +14,7 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PatchMapping
-    public void UpdateCustomers(@RequestBody ReqModifyCustomerDto reqModifyCustomerDto){
+    public void updateCustomers(@RequestBody ReqModifyCustomerDto reqModifyCustomerDto){
 
         customerService.updateCustomers(reqModifyCustomerDto);
     }

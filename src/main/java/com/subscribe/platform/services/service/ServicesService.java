@@ -8,6 +8,7 @@ import com.subscribe.platform.common.properties.GlobalProperties;
 import com.subscribe.platform.services.dto.*;
 import com.subscribe.platform.services.entity.*;
 import com.subscribe.platform.services.repository.*;
+import com.subscribe.platform.subscribe.entity.Subscribe;
 import com.subscribe.platform.subscribe.repository.SubscribeRepository;
 import com.subscribe.platform.user.entity.Customer;
 import com.subscribe.platform.user.repository.UserRepository;
@@ -98,11 +99,10 @@ public class ServicesService {
      */
     public ListResponse getNewServiceList(PageRequest pageRequest) {
 
-        LocalDateTime toDate = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0));
-        LocalDateTime fromDate = toDate.minusDays(3);
-        Page<Services> result = servicesRepository.findByCreatedDateBetween(fromDate, toDate, pageRequest);
+        LocalDateTime fromDate = LocalDateTime.of(LocalDate.now().minusDays(3), LocalTime.of(0,0,0));
+        LocalDateTime toDate = LocalDateTime.of(LocalDate.now(), LocalTime.of(23,59,59));
 
-        log.debug("nowDate = {}", toDate);
+        Page<Services> result = servicesRepository.findByCreatedDateBetween(fromDate, toDate, pageRequest);
 
         List<ResServiceListDto> list = result.stream()
                 .map(o -> new ResServiceListDto(o, globalProperties.getFileUploadPath()))
@@ -120,7 +120,7 @@ public class ServicesService {
         Customer customer = userRepository.findByEmail(email).getCustomer();
 
         /**
-         * validation
+         * TODO validation check
          * 1. 해당소비자가 서비스 구독하고 있는지 여부,
          * 2. 배송(서비스)일로부터 일주일 지난 후 (지금 못함)
          */
@@ -152,5 +152,50 @@ public class ServicesService {
                 .build();
 
         reviewRepository.save(review);
+    }
+
+    /**
+     * 이번주 인기 서비스 : 한주 동안 구독이 제일 많이 된 상위 5개 서비스
+     */
+    public ListResponse<ResServiceListDto> weeklyPopularity(){
+        PageRequest pageRequest = PageRequest.of(0, 5);
+
+        LocalDateTime startDate = calcStartDateOfWeek();
+        List<Subscribe> subscribes = subscribeRepository.weeklyPopularity(startDate, startDate.plusDays(7), pageRequest);
+        log.info("subscribe size = {}", subscribes.size());
+        List<Services> services = subscribes.stream()
+                .map(o -> o.getServices()).collect(Collectors.toList());
+        log.info("service size = {}", services.size());
+        List<ResServiceListDto> list = services.stream().map(
+                s -> new ResServiceListDto(s, globalProperties.getFileUploadPath())
+        ).collect(Collectors.toList());
+
+        return new ListResponse(list, list.size());
+    }
+
+    /**
+     * 최근 본 서비스 조회
+     */
+    public ListResponse<ResServiceListDto> recentService(List<Long> idList){
+        PageRequest pageRequest = PageRequest.of(0, 20);
+        Page<Services> result = servicesRepository.findByIdIn(idList, pageRequest);
+
+        List<ResServiceListDto> list = result.stream()
+                .map(o -> new ResServiceListDto(o, globalProperties.getFileUploadPath()))
+                .collect(Collectors.toList());
+
+        return new ListResponse<>(list, result.getTotalElements());
+    }
+
+    //======================================================
+
+    /**
+     * 현재 주가 시작되는 날짜 구하는 함수
+     */
+    LocalDateTime calcStartDateOfWeek(){
+        LocalDateTime today = LocalDateTime.of(LocalDate.now(), LocalTime.of(0,0,0));
+        int dowNum = today.getDayOfWeek().getValue();  // 월요일 ~ 일요일: 1~7 (dow:DayOfWeek)
+        LocalDateTime startDate = today.minusDays(dowNum-1);
+        return startDate;
     }
 }
