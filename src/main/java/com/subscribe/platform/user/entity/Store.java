@@ -1,5 +1,6 @@
 package com.subscribe.platform.user.entity;
 
+import com.subscribe.platform.subscribe.entity.Delivery;
 import com.subscribe.platform.services.entity.Services;
 import io.jsonwebtoken.lang.Assert;
 import lombok.AccessLevel;
@@ -29,6 +30,9 @@ public class Store {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Services> servicesList = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Delivery> deliveries = new ArrayList<>();
 
     public void setUser(User user){
         this.user = user;

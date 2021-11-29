@@ -28,6 +28,7 @@ public class Subscribe extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Enumerated(EnumType.STRING)
     private ServiceCycle deliveryCycle; // 배송주기 : WEEK, MONTH
     private String deliveryDay; // 배송일 : 요일 or 날짜
 

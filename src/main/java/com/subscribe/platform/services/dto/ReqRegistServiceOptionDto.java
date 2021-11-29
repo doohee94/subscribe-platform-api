@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class ReqRegistServiceOptionDto {
 
-    @NotBlank
+
     private String optionName;
     private int price;
     private int stock;

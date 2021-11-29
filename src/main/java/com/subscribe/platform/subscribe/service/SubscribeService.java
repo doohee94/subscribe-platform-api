@@ -8,6 +8,7 @@ import com.subscribe.platform.services.repository.ServiceOptionRepository;
 import com.subscribe.platform.services.repository.ServicesRepository;
 import com.subscribe.platform.subscribe.dto.*;
 import com.subscribe.platform.subscribe.entity.*;
+import com.subscribe.platform.subscribe.event.DeliveryEventDto;
 import com.subscribe.platform.subscribe.repository.PaymentResultRepository;
 import com.subscribe.platform.subscribe.repository.SubscribeRepository;
 import com.subscribe.platform.user.entity.Customer;
@@ -15,6 +16,8 @@ import com.subscribe.platform.user.entity.User;
 import com.subscribe.platform.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +38,9 @@ public class SubscribeService {
     private final ServicesRepository servicesRepository;
     private final UserRepository userRepository;
     private final PaymentResultRepository paymentResultRepository;
+
+    private final ApplicationEventPublisher eventPublisher;
+
 
     /**
      * 나의 구독 리스트 조회
@@ -148,7 +154,8 @@ public class SubscribeService {
         String subscribes = "";
         // 장바구니정보 확인
         for (Long subscribeId : payInfoDto.getSubscribeIds()) {
-            Subscribe subscribe = subscribeRepository.findByIdAndStatusAndCustomerId(subscribeId, Status.SHOPPING, customer.getId()).orElseThrow(EntityNotFoundException::new);
+            Subscribe subscribe = subscribeRepository.findByIdAndStatusAndCustomerId(subscribeId, Status.SHOPPING, customer.getId())
+                .orElseThrow(EntityNotFoundException::new);
             // 장바구니에 담긴 물품이 있다면
             // 1. 구독으로 상태변경
             subscribe.startSubscribe();
@@ -188,6 +195,9 @@ public class SubscribeService {
 
         // 4. 결제 결과 저장
         savePaymentResult(payInfoDto, customer, totalPrice, subscribes);
+
+        //5. 배송정보 저장 이벤트
+        eventPublisher.publishEvent(new DeliveryEventDto(subscribes));
     }
 
     /**
@@ -220,5 +230,9 @@ public class SubscribeService {
 
         subscribeRepository.save(subscribe);
 
+    }
+
+    public List<Subscribe> findByIds(List<Long> subscribeIds) {
+        return subscribeRepository.findByIdIn(subscribeIds);
     }
 }

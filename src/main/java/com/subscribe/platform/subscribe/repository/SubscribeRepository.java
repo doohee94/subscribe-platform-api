@@ -2,8 +2,8 @@ package com.subscribe.platform.subscribe.repository;
 
 import com.subscribe.platform.subscribe.entity.Status;
 import com.subscribe.platform.subscribe.entity.Subscribe;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,6 +23,7 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
 
     Optional<Subscribe> findByIdAndStatusAndCustomerId(@Param("subscribeId") Long subscribeId, @Param("status") Status status, @Param("customerId") Long customerId);
 
+    @EntityGraph(attributePaths = {"services","services.store"})
     List<Subscribe> findByIdIn(@Param("subscribeIds") List<Long> subscribeIds);
 
     @EntityGraph(attributePaths = {"services"})
