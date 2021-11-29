@@ -11,20 +11,20 @@ import java.util.List;
 @NoArgsConstructor
 public class ReqRegistServiceDto {
 
-
+    @NotBlank
     private String serviceName;
-
+    @NotBlank
     private String serviceCycle;
-
+    @NotBlank
     private String availableDay;
-
+//    @NotBlank
     private String detailContents;
 
-
+    @NotEmpty
     private List<ReqRegistServiceOptionDto> serviceOptions;
-
+//    @NotEmpty
     private List<ReqRegistServiceImageDto> serviceImages;
-
+    @NotEmpty
     private List<ReqRegistCategoryDto> categories;
 
     public ReqRegistServiceDto(String serviceName, String serviceCycle, String availableDay, String detailContents, List<ReqRegistServiceOptionDto> serviceOptions, List<ReqRegistServiceImageDto> serviceImages, List<ReqRegistCategoryDto> categories) {
