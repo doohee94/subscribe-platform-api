@@ -1,5 +1,6 @@
 package com.subscribe.platform.services.controller;
 
+import com.subscribe.platform.services.dto.DateType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,15 +19,19 @@ public class DeliveryController {
 
 	private final DeliveryService deliveryService;
 
+	@GetMapping("/store/{id}/deliveries/{type}")
+	public ListResponse<ReqDetailDeliveryDto> getDeliveries(@PathVariable long id, @PathVariable String type, String date){
+
+		DateType dateType = DateType.toKey(type);
+
+		return new ListResponse<>(deliveryService.getDeliveries(id, dateType, date));
+	}
+
 	@GetMapping("/store/{id}/deliveries/calendar")
-	public ListResponse<ReqDeliveryCountDto> getDeliveriesDateAndCount(@PathVariable long id, int month){
+	public ListResponse<ReqDeliveryCountDto> getDeliveriesDateAndCount(@PathVariable long id, Integer month){
 		return new ListResponse<>(deliveryService.getDeliveriesDateAndCount(id,month));
 	}
 
-	@GetMapping("/store/{id}/deliveries")
-	public ListResponse<ReqDetailDeliveryDto> getDeliveries(@PathVariable long id, String date){
-		return new ListResponse<>(deliveryService.getDeliveries(id,date));
-	}
 
 	@GetMapping("/service/{subscribeId}/options")
 	public ReqServiceOptionsDto getDeliveryDetail(@PathVariable long subscribeId){

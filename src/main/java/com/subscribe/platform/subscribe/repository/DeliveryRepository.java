@@ -15,4 +15,6 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
 	@EntityGraph(attributePaths = {"subscribe","subscribe.services"})
 	List<Delivery> findByStoreIdAndDeliveryDate(long storeId, LocalDate date);
 
+	@EntityGraph(attributePaths = {"subscribe","subscribe.services"})
+	List<Delivery> findByStoreIdAndDeliveryDateBetween(long storeId, LocalDate startDay, LocalDate endDay);
 }

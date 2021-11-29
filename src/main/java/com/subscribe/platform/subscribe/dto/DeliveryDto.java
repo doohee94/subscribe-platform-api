@@ -38,6 +38,10 @@ public class DeliveryDto {
 
 		if (deliveryCycle == ServiceCycle.MONTH) {
 
+			//월 -> 배송우너하는날 이 만약에 결제일
+
+			// 결제일 > 배송일 보다 크면 -> 다음달 부터 배송
+			// 결제일 < 배송이 작 이번달
 			int dDay = Integer.parseInt(deliveryDay);
 
 			if (today.getDayOfMonth() > dDay) {
@@ -48,10 +52,13 @@ public class DeliveryDto {
 
 		} else if (deliveryCycle == ServiceCycle.WEEK) {
 
+			// 프론트에서
+
 			DayOfWeek week = DateUtils.convertStringToDayOfWeek(deliveryDay);
 
 			LocalDate tempDate = today;
 
+			// 4주 배송
 			for (int i = 0; i < 4; i++) {
 				tempDate = tempDate.with(TemporalAdjusters.next(week));
 				tempDates.add(tempDate);
