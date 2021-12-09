@@ -5,7 +5,7 @@
 
 1. 프레임워크: Spring Boot 2.5.3
 2. 툴: IntelliJ IDEA
-3. WAS: apache(스프링부트 내장 톰캣 사용)
+3. 서버: 스프링부트 아파치 톰캣 내장 서버 사용
 4. DB: MySQL 8.0.25
 5. 기타
    - jdk11
