@@ -11,11 +11,11 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 public class ReqRegistServiceImageDto {
 
-//    @NotBlank
+    @NotBlank
     private String imageType;
-//    @NotBlank
+    @NotBlank
     private int imageSeq;
-//    @NotEmpty
+    @NotEmpty
     private MultipartFile imageFile;
 
     public void setImageType(String imageType) {

@@ -53,46 +53,41 @@ public class StoreServicesService {
 
         // 서비스 옵션 담기
         List<ServiceOption> serviceOptionList = new ArrayList<>();
-        if(dto.getServiceOptions() != null){
-            for (ReqRegistServiceOptionDto serviceOptionDto : dto.getServiceOptions()) {
-                ServiceOption option = ServiceOption.builder()
-                        .name(serviceOptionDto.getOptionName())
-                        .price(serviceOptionDto.getPrice())
-                        .stock(serviceOptionDto.getStock())
-                        .maxCount(serviceOptionDto.getMaxCount())
-                        .build();
-                serviceOptionList.add(option);
-            }
+        for (ReqRegistServiceOptionDto serviceOptionDto : dto.getServiceOptions()) {
+            ServiceOption option = ServiceOption.builder()
+                    .name(serviceOptionDto.getOptionName())
+                    .price(serviceOptionDto.getPrice())
+                    .stock(serviceOptionDto.getStock())
+                    .maxCount(serviceOptionDto.getMaxCount())
+                    .build();
+            serviceOptionList.add(option);
         }
+
 
         // 서비스 카테고리 담기
         List<Category> categoryList = new ArrayList<>();
-        if(dto.getCategories() != null){
-            for (ReqRegistCategoryDto categoryDto : dto.getCategories()) {
-                Optional<Category> category = categoryRepository.findById(categoryDto.getCategoryId());
+        for (ReqRegistCategoryDto categoryDto : dto.getCategories()) {
+            Optional<Category> category = categoryRepository.findById(categoryDto.getCategoryId());
 
-                Optional.of(category).ifPresent((value) -> {
-                    categoryList.add(value.orElseThrow(EntityNotFoundException::new));
-                });
-            }
+            Optional.of(category).ifPresent((value) -> {
+                categoryList.add(value.orElseThrow(EntityNotFoundException::new));
+            });
         }
 
         // 서비스 이미지 담기
         List<ServiceImage> serviceImageList = new ArrayList<>();
-        if(dto.getServiceImages() != null){
-            for (ReqRegistServiceImageDto serviceImageDto : dto.getServiceImages()) {
+        for (ReqRegistServiceImageDto serviceImageDto : dto.getServiceImages()) {
 
-                FileInfo fileInfo = fileHandler.getFileInfo(serviceImageDto.getImageFile());
+            FileInfo fileInfo = fileHandler.getFileInfo(serviceImageDto.getImageFile());
 
-                ServiceImage image = ServiceImage.builder()
-                        .name(fileInfo.getOriginName())
-                        .fakeName(fileInfo.getFakeName())
-                        .extensionName(fileInfo.getExtensionName())
-                        .imageType("THUMBNAIL".equals(serviceImageDto.getImageType()) ? ImageType.THUMBNAIL : ImageType.DETAIL)
-                        .imageSeq(serviceImageDto.getImageSeq())
-                        .build();
-                serviceImageList.add(image);
-            }
+            ServiceImage image = ServiceImage.builder()
+                    .name(fileInfo.getOriginName())
+                    .fakeName(fileInfo.getFakeName())
+                    .extensionName(fileInfo.getExtensionName())
+                    .imageType("THUMBNAIL".equals(serviceImageDto.getImageType()) ? ImageType.THUMBNAIL : ImageType.DETAIL)
+                    .imageSeq(serviceImageDto.getImageSeq())
+                    .build();
+            serviceImageList.add(image);
         }
 
 
