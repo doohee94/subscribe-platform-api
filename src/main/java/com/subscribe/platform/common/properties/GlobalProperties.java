@@ -11,6 +11,6 @@ import org.springframework.stereotype.Component;
 @Getter
 public class GlobalProperties {
 
-    @Value("${file.upload.directory}")
+    @Value("${C:\\Users\\BMJ\\project\\ReactProject\\subscribe-platform\\Subscribe-Platform-React\\public\\images}")
     private String fileUploadPath;
 }

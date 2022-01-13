@@ -162,10 +162,10 @@ public class ServicesService {
 
         LocalDateTime startDate = calcStartDateOfWeek();
         List<Subscribe> subscribes = subscribeRepository.weeklyPopularity(startDate, startDate.plusDays(7), pageRequest);
-        log.info("subscribe size = {}", subscribes.size());
+        log.debug("subscribe size = {}", subscribes.size());
         List<Services> services = subscribes.stream()
                 .map(o -> o.getServices()).collect(Collectors.toList());
-        log.info("service size = {}", services.size());
+        log.debug("service size = {}", services.size());
         List<ResServiceListDto> list = services.stream().map(
                 s -> new ResServiceListDto(s, globalProperties.getFileUploadPath())
         ).collect(Collectors.toList());

@@ -28,18 +28,14 @@ public class FileHandler {
         if(ObjectUtils.isEmpty(contentType)){
             return null;
         }
+        // 이미지파일이 아니면 에러
+        if(!contentType.contains("image")){
+            return null;
+        }
 
-        String originalFileExtension = "";
         // 파일 확장자명 설정
-        if(contentType.contains("image/jpeg")){
-            originalFileExtension = ".jpg";
-        }
-        else if(contentType.contains("image/png")){
-            originalFileExtension = ".png";
-        }
-        else if(contentType.contains("image/gif")){
-            originalFileExtension = ".gif";
-        }
+        String originalFileExtension = extractExt(file.getOriginalFilename());
+
 
         // 저장할 이름 설정
         String fileFakeName = String.valueOf(UUID.randomUUID());
@@ -52,6 +48,12 @@ public class FileHandler {
                 .fakeName(fileFakeName)
                 .extensionName(originalFileExtension)
                 .build();
+    }
+
+    // 확장자명 추출
+    private String extractExt(String originalFilename){
+        int pos = originalFilename.lastIndexOf(".");
+        return originalFilename.substring(pos+1);
     }
 
     /**

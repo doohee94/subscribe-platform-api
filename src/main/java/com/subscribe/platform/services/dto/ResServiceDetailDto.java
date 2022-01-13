@@ -18,7 +18,7 @@ public class ResServiceDetailDto {
     private List<SelectBox<String>> availableDay;
     private String detailContents;
     private List<ReqRegistServiceOptionDto> serviceOptions;
-    private List<String> serviceImages;
+    private List<ResServiceImageDto> serviceImages;
 
 
     public ResServiceDetailDto(Services serviceDetail) {
@@ -37,9 +37,18 @@ public class ResServiceDetailDto {
                 .map(ReqRegistServiceOptionDto::new)
                 .collect(Collectors.toList());
 
+//        this.serviceImages = serviceDetail.getServiceImages().stream()
+//                .map(image -> image.getFakeName() + image.getExtensionName())
+//                .collect(Collectors.toList());
+
         this.serviceImages = serviceDetail.getServiceImages().stream()
-                .map(ServiceImage::getExtensionName)
-                .collect(Collectors.toList());
+                .map(
+                        images -> ResServiceImageDto.builder()
+                                .imageType(images.getImageType().toString())
+                                .imageSeq(images.getImageSeq())
+                                .imageUrl(images.getFakeName() + images.getExtensionName())
+                                .build()
+                ).collect(Collectors.toList());
 
     }
 }
